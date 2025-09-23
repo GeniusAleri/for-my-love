@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Berat Badan</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #f1b3f3, #eea8e3);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #4b0082;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            color: #6a0dad;
+            text-shadow: 2px 2px #e1bee7;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(135deg, #9b59b6, #ba68c8);
+            color: white;
+            transition: 0.3s;
+            box-shadow: 0 6px 15px rgba(155, 89, 182, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 8px 20px rgba(155, 89, 182, 0.5);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            animation: bounceIn 0.5s ease;
+            position: relative;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 90%;
+            border-radius: 20px;
+            border: 2px solid #ba68c8;
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #9b59b6;
+        }
+
+        .result-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #6a0dad;
+            animation: glow 1s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #ba68c8;
+            }
+
+            to {
+                text-shadow: 0 0 15px #e1bee7;
+            }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: pink;
+            top: -10px;
+            border-radius: 50%;
+            animation: fall 3s linear forwards;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎀 Aplikasi Berat Badan 🎀</h1>
+    <button class="btn" onclick="openModal('naik')">🍔 Menaikkan Berat</button>
+    <button class="btn" onclick="openModal('turun')">🏃 Menurunkan Berat</button>
+
+    <!-- Modal Input -->
+    <div class="modal" id="inputModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('inputModal')">&times;</span>
+            <h2 id="modalTitle">Masukkan Data ✨</h2>
+            <input type="number" id="currentWeight" placeholder="Berat sekarang (kg)">
+            <input type="number" id="targetWeight" placeholder="Berat tujuan (kg)">
+            <br>
+            <button class="btn" onclick="submitForm()">Submit</button>
+        </div>
+    </div>
+
+    <!-- Modal Hasil -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('resultModal')">&times;</span>
+            <h2>🎉 Hasil 🎉</h2>
+            <p class="result-text" id="resultText"></p>
+            <button class="btn" onclick="closeModal('resultModal')">OK 👍</button>
+        </div>
+    </div>
+
+    <script>
+        let mode = "";
+
+        function openModal(selectedMode) {
+            mode = selectedMode;
+            document.getElementById("inputModal").style.display = "flex";
+            document.getElementById("modalTitle").innerText =
+                mode === "naik" ? "🍔 Naikkan Berat Badan" : "🏃 Turunkan Berat Badan";
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function submitForm() {
+            const current = document.getElementById("currentWeight").value;
+            const target = document.getElementById("targetWeight").value;
+            let message = "";
+
+            if (mode === "turun") {
+                message = `Sekarang ${current}kg → target ${target}kg 💪 ga mungkin sii uswa milih ini harusnya wkwk!`;
+            } else {
+                message = `Sekarang ${current}kg → target ${target}kg 🍕 Makan banyakk ajaa abis itu banyakin tidurr wkwkkw jadi makan tidur makan tidur jaa!`;
+            }
+
+            closeModal('inputModal');
+            document.getElementById("resultText").innerText = message;
+            document.getElementById("resultModal").style.display = "flex";
+
+            launchConfetti();
+        }
+
+        // Confetti effect
+        function launchConfetti() {
+            for (let i = 0; i < 25; i++) {
+                const confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                document.body.appendChild(confetti);
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.backgroundColor = ["#ff80ab", "#ba68c8", "#ce93d8", "#f48fb1", "#e1bee7"][Math.floor(Math.random() * 5)];
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        // klik luar modal buat tutup
+        window.onclick = function (e) {
+            const inputModal = document.getElementById("inputModal");
+            const resultModal = document.getElementById("resultModal");
+            if (e.target === inputModal) closeModal('inputModal');
+            if (e.target === resultModal) closeModal('resultModal');
+        }
+    </script>
+</body>
+
+</html>
