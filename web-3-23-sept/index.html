@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Semangat Hari Ini 💜 23 Sept</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0b3ff, #f8e1ff);
+            color: #4a2c5f;
+            text-align: center;
+            padding: 30px;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-top: 40px;
+            animation: fadeInDown 1.5s ease-in-out;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 20px 0;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            max-width: 400px;
+            margin: 30px auto;
+            box-shadow: 0 8px 20px rgba(192, 132, 252, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #c084fc;
+            color: white;
+            padding: 12px 25px;
+            margin-top: 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(192, 132, 252, 0.5);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.7);
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: #c084fc;
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .music-btn {
+            margin-top: 20px;
+            background: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 15px;
+            color: #4a2c5f;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(192, 132, 252, 0.4);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .music-btn:hover {
+            background: #c084fc;
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>💜 Semangat Untukmu Hari Ini 💜</h1>
+    <h4>💜 23 September 2025 💜</h4>
+    <p>~To Ayangg, From Dyanee~</p>
+    <p>Sayang, jangan lupa tersenyum yaa... 🌸<br>
+        Hari ini akan indah kalau kamu jalani dengan hati yang penuh cinta ✨</p>
+
+    <div class="card">
+        <p>🌷 "Aku percaya kamu kuat, hebat, dan bisa melewati hari ini dengan penuh senyum.
+            Ingat, ada aku yang selalu dukung kamu. Semangatt sayangkuu 💕" 🌷</p>
+    </div>
+
+    <button class="music-btn" onclick="toggleMusic()">🎵 Putar / Pause Lagu</button>
+    <audio id="bg-music" loop>
+        <source src="kekasih-impian.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="hearts"></div>
+
+    <script>
+        // Floating hearts
+        const heartsContainer = document.querySelector('.hearts');
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '💜';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heartsContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }, 500);
+
+        // Music toggle
+        const music = document.getElementById('bg-music');
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+
+</html>
