@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cerita Indah Hari Ini 💜</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0d9ff, #e5b3fe);
+            color: #442c5f;
+            text-align: center;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-top: 40px;
+            animation: fadeInDown 1.5s ease-in-out;
+        }
+
+        h4 {
+            font-weight: normal;
+            margin: 10px 0 20px;
+            color: #6a3fa0;
+            animation: fadeInUp 1.8s ease-in-out;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 15px 0;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .quote-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 420px;
+            margin: 30px auto;
+            box-shadow: 0 8px 20px rgba(150, 100, 200, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .music-btn {
+            margin-top: 20px;
+            background: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 15px;
+            color: #442c5f;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(170, 120, 220, 0.4);
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            background: #c084fc;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            color: #fff;
+            font-size: 12px;
+            opacity: 0.8;
+            animation: twinkle 4s linear infinite;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+
+            100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>💜 Cerita Indah Hari Ini 💜</h1>
+    <h4>🌸 23 September 2025 🌸</h4>
+    <p>Untukmu yang selalu kusayang... ✨</p>
+
+    <div class="quote-card">
+        <p>🌷 "Hari ini indah karena ada kamu di dalamnya.
+            Jangan pernah ragu, kamu hebat dan luar biasa.
+            Aku selalu percaya, kamu bisa menaklukkan semua hal.
+            Semangat terus, cintakuuu 💕" 🌷</p>
+    </div>
+
+    <button class="music-btn" onclick="toggleMusic()">🎶 Play / Pause Musik</button>
+    <audio id="bg-music" loop>
+        <source src="bentul-cinta.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="stars"></div>
+
+    <script>
+        // Bintang-bintang
+        const starsContainer = document.querySelector('.stars');
+        setInterval(() => {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.innerText = '✨';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            starsContainer.appendChild(star);
+            setTimeout(() => star.remove(), 6000);
+        }, 700);
+
+        // Musik toggle
+        const music = document.getElementById('bg-music');
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+
+</html>
