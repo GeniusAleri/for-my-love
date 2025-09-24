@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Semangat Baru 💜 24 Sept</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f3d1ff, #d9b3ff);
+            color: #3b235a;
+            text-align: center;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-top: 40px;
+            animation: fadeInDown 1.5s ease-in-out;
+        }
+
+        h4 {
+            margin: 10px 0 20px;
+            color: #6c3f99;
+            font-weight: normal;
+            animation: fadeInUp 1.8s ease-in-out;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 15px 0;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .quote-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 420px;
+            margin: 30px auto;
+            box-shadow: 0 8px 20px rgba(150, 100, 200, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .music-btn {
+            margin-top: 20px;
+            background: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 15px;
+            color: #3b235a;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(170, 120, 220, 0.4);
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            background: #c084fc;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .balloons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 24px;
+            animation: floatUp 8s linear infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>💜 Semangat Baru Untukmu 💜</h1>
+    <h4>✨ 25 September 2025 ✨</h4>
+    <p>Untuk cintaku tersayang... 🌸</p>
+
+    <div class="quote-card">
+        <p>🎈 "Hari ini adalah lembaran baru,
+            jangan takut melangkah karena aku yakin kamu mampu.
+            Aku selalu di sini, mendukungmu,
+            mari kita isi hari ini dengan senyum dan cinta 💕" 🎈</p>
+    </div>
+
+    <button class="music-btn" onclick="toggleMusic()">🎶 Play / Pause Musik</button>
+    <audio id="bg-music" loop>
+        <source src="blue.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="balloons"></div>
+
+    <script>
+        // Balon terbang
+        const balloonsContainer = document.querySelector('.balloons');
+        const colors = ['💜', '🎈', '💖', '🌸'];
+        setInterval(() => {
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+            balloon.innerText = colors[Math.floor(Math.random() * colors.length)];
+            balloon.style.left = Math.random() * 100 + 'vw';
+            balloon.style.fontSize = Math.random() * 20 + 20 + 'px';
+            balloon.style.animationDuration = (Math.random() * 4 + 5) + 's';
+            balloonsContainer.appendChild(balloon);
+            setTimeout(() => balloon.remove(), 9000);
+        }, 800);
+
+        // Music toggle
+        const music = document.getElementById('bg-music');
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+
+</html>
