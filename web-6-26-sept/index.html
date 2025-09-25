@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bunga Harapan 💜 26 Sept</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f9e6ff, #dab6fc);
+            color: #3a1c58;
+            text-align: center;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-top: 40px;
+            animation: fadeInDown 1.5s ease-in-out;
+        }
+
+        h4 {
+            margin: 10px 0 20px;
+            color: #6e3f91;
+            font-weight: normal;
+            animation: fadeInUp 1.8s ease-in-out;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 15px 0;
+            animation: fadeInUp 2s ease-in-out;
+        }
+
+        .quote-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 420px;
+            margin: 30px auto;
+            box-shadow: 0 8px 20px rgba(170, 120, 220, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .music-btn {
+            margin-top: 20px;
+            background: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 15px;
+            color: #3a1c58;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(170, 120, 220, 0.4);
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            background: #c084fc;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .flowers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 22px;
+            animation: fall 7s linear infinite;
+            opacity: 0.9;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>💜 Mekar Semangatmu 💜</h1>
+    <h4>🌷 26 September 2025 🌷</h4>
+    <p>Untuk cintaku, bunga terindah di hidupku... 💕</p>
+
+    <div class="quote-card">
+        <p>🌸 "Seperti bunga yang mekar di pagi hari,
+            senyummu membuat dunia jadi lebih indah.
+            Jalani hari ini dengan hati yang penuh cinta,
+            dan percayalah, aku selalu di sisimu." 🌸</p>
+    </div>
+
+    <button class="music-btn" onclick="toggleMusic()">🎶 Play / Pause Musik</button>
+    <audio id="bg-music" loop>
+        <source src="love-story.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="flowers"></div>
+
+    <script>
+        // Bunga jatuh
+        const flowersContainer = document.querySelector('.flowers');
+        const flowers = ['🌸', '💮', '🌷', '💜'];
+        setInterval(() => {
+            const flower = document.createElement('div');
+            flower.classList.add('flower');
+            flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.fontSize = Math.random() * 20 + 20 + 'px';
+            flower.style.animationDuration = (Math.random() * 4 + 5) + 's';
+            flowersContainer.appendChild(flower);
+            setTimeout(() => flower.remove(), 8000);
+        }, 700);
+
+        // Musik toggle
+        const music = document.getElementById('bg-music');
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+
+</html>
