@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semangat 27 September 💜</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: linear-gradient(150deg, #f3d1ff, #caa5f8);
+            font-family: 'Poppins', sans-serif;
+            color: #3d1a5d;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            max-width: 520px;
+            animation: fadeIn 1.3s ease;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .date {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #6c3da1;
+            font-style: italic;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 30px;
+            background: #9a4de0;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #823cc4;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>💜 Semangat di 27 September 💜</h1>
+        <p>Sayang, jangan takut sama hari ini 🌼</p>
+        <p>Aku percaya setiap langkahmu akan membawa hasil indah 🌈</p>
+        <p>Kamu nggak sendirian, aku selalu ada di sampingmu 💕</p>
+        <div class="date">27 September 2025</div>
+
+        <button onclick="toggleMusic()">🎶 Play / Pause Lagu</button>
+        <audio id="bg-music" loop>
+            <source src="ily-3000.mp3" type="audio/mp3">
+        </audio>
+    </div>
+
+    <script>
+        const music = document.getElementById("bg-music");
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+    </script>
+</body>
+
+</html>
