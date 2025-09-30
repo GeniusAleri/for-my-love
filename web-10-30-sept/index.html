@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30 September - Semangat LDR</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #c084fc, #e9d5ff);
+            color: #4b006e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 2rem;
+            color: #6b21a8;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin: 20px auto;
+            max-width: 800px;
+            line-height: 1.8;
+        }
+
+        /* Slideshow */
+        /* Slideshow */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(155, 93, 229, 0.4);
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            /* smooth fade */
+        }
+
+        .slide img {
+            width: 100%;
+            display: block;
+            border-radius: 20px;
+        }
+
+        .slide.active {
+            opacity: 1;
+            position: relative;
+        }
+
+
+
+        /* Tombol musik */
+        .music {
+            margin: 20px;
+        }
+
+        .music button {
+            background: #a855f7;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .music button:hover {
+            background: #9333ea;
+        }
+
+        /* Falling hearts */
+        .heart {
+            position: fixed;
+            top: -10px;
+            color: #ec4899;
+            font-size: 20px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>30 September 2025</h1>
+        <p>
+            30 September 2025, hari terakhir di bulan ini, dimana ini adalah bulan yang penuh makna buat aku,
+            bulan dimana aku bertemu kamuu, bulan dimana aku merasakan hangat pelukanmu, dan juga bulan dimana
+            aku menyatakan cinta kepadamuu sayangg ❤️
+        </p>
+        <p>
+            aku gatau lagi harus dengan cara apa aku bersyukur dengan semua ini, yang pasti aku bakal terus berusaha
+            untuk membahagiakan kamuu, akuu mau jadi laki laki yang bisa merubah sedih menjadi senyum di wajah kamu,
+            akuu sayangg sama kamuu uswaaa💜
+        </p>
+        <p>
+            maafin akuu kalo pagi ini udah bikin kamu ga nyaman sama akuu, tapii kamu harus tau, itu karena aku ga bisa
+            liat kamu terus terusan seperti ituu, dia udah terlalu banyak merepotkan kamuu sayangg, kalo ada pilihan,
+            aku mau gantiin dia kerja disana, aku mau lindungin kamu di setiap waktu akuu
+        </p>
+        <p>
+            tapii selama waktu itu belum tiba, aku cuma bisa doain kamu dan kasih support buat kamu dari jauh yaa
+            sayangg, doa aku ga pernah lepas dari kamu dan untuk kebahagiaan kamu, sekali lagii. I LOVE U BABYY💕
+        </p>
+        <!-- Slider Foto -->
+        <div class="slideshow-container">
+            <div class="slide active"><img src="1.jpg" alt="Foto 1"></div>
+            <div class="slide"><img src="2.jpg" alt="Foto 2"></div>
+            <div class="slide"><img src="3.jpg" alt="Foto 3"></div>
+            <div class="slide"><img src="4.jpg" alt="Foto 4"></div>
+        </div>
+
+
+        <!-- Musik -->
+        <div class="music">
+            <button onclick="toggleMusic()">🎶 Putar Lagu</button>
+            <audio id="song" src="Afgan - Untukmu Aku Bertahan (OST My Idiot Brother)  Official Video Clip.mp3"></audio>
+        </div>
+    </div>
+    <script>
+        // Music
+        const song = document.getElementById('song');
+        let isPlaying = false;
+        function toggleMusic() {
+            if (isPlaying) {
+                song.pause();
+            } else {
+                song.play();
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Falling hearts
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerText = "💜";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+        setInterval(createHeart, 500);
+
+        let slideIndex = 0;
+        const slides = document.querySelectorAll(".slide");
+
+        function showSlides() {
+            slides.forEach(slide => slide.classList.remove("active"));
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].classList.add("active");
+            setTimeout(showSlides, 2000); // ganti foto tiap 4 detik
+        }
+        showSlides();
+
+    </script>
+</body>
+
+</html>
