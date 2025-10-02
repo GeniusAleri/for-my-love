@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ucapan 2 Oktober</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            text-align: center;
+            color: #fff;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 2rem;
+        }
+
+        /* Slideshow */
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            margin: 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide {
+            display: none;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            display: block;
+            border-radius: 20px;
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* Animasi Fade */
+        .fade {
+            animation: fadeEffect 1.2s ease-in-out;
+        }
+
+        @keyframes fadeEffect {
+            from {
+                opacity: 0.4
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        /* Tombol Musik */
+        .music-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.05);
+        }
+
+        #timer {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Selamat 2 Oktober ✨</h1>
+    <div id="timer">Waktu berjalan: 0 detik</div>
+    <div class="slideshow-container">
+        <div class="slide fade">
+            <img src="1.jpg" alt="Foto 1">
+            <div class="caption">Haii sayanggkuuu, selamat 4 harii pacarann hihihi, kamuu pagii ini sibukk yaaa,
+                semangatt yaa sayanggkuu😘</div>
+        </div>
+        <div class="slide fade">
+            <img src="2.jpg" alt="Foto 2">
+            <div class="caption">akuu mau nulis apaa yaa harii ini hmmm, akuu mauu bilang ini aja deh.....</div>
+        </div>
+        <div class="slide fade">
+            <img src="3.jpg" alt="Foto 3">
+            <div class="caption">Halloooww wanitaa yang akuu cintaiii, yangg akuu sayanggg, dan yang selaluu akuu
+                jadikan tujuaan akuuu, makasihh yaa kamu selalu ada di sisi akuu sampai detik ini, sejak saat ituu
+                hingga detik ini kamu satu satunyaa wanitaa yang akuu cintai sama seperti aku mencintai keluarga akuu,
+                kamuu jangan khawaitr yaa, walaupun aku jauh, aku disini sama sekalii gaada ngelakuin hal hal yang kamu
+                ga suka kok, dan apapun yang aku lakuin aku bakal selalu kabarin kamuu sayangg, jadii kamu disanaaa baik
+                baikk jugaa yaa babyy</div>
+        </div>
+        <div class="slide fade">
+            <img src="4.jpg" alt="Foto 4">
+            <div class="caption">I LOVE U SAYANGGKUUU💕❤️💜😘💘</div>
+        </div>
+    </div>
+
+    <button class="music-btn" onclick="playMusic()">▶ Play Lagu</button>
+
+    <audio id="bg-music" src="Virgoun - Bukti (Official Lyric Video).mp3"></audio>
+
+    <!-- Script Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll(".slide");
+        const durations = [10, 10, 20, 10]; // durasi tiap slide (detik)
+        let countdown = durations[0];
+        const timerDisplay = document.getElementById("timer");
+        let slideTimeout; // untuk simpan timeout antar slide
+
+        function showSlides() {
+            // reset display semua slide
+            slides.forEach(slide => slide.style.display = "none");
+
+            // maju ke slide berikutnya
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+
+            // tampilkan slide aktif
+            slides[slideIndex - 1].style.display = "block";
+
+            // set countdown sesuai durasi slide ini
+            countdown = durations[slideIndex - 1];
+            updateTimer();
+
+            // clear timeout sebelumnya
+            clearTimeout(slideTimeout);
+
+            // jalankan slide berikutnya sesuai durasi array
+            slideTimeout = setTimeout(showSlides, countdown * 1000);
+        }
+
+        function updateTimer() {
+            timerDisplay.textContent = "Slide berikutnya dalam: " + countdown + " detik";
+        }
+
+        // hitung mundur per detik
+        setInterval(() => {
+            countdown--;
+            if (countdown < 0) countdown = 0;
+            updateTimer();
+        }, 1000);
+
+        // mulai slideshow
+        showSlides();
+
+        function playMusic() {
+            const music = document.getElementById("bg-music");
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+
+            // Efek confetti saat klik
+            confetti({
+                particleCount: 1000,
+                spread: 200,
+                origin: { y: 0.8 }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
