@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3 Oktober Romantis</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Slideshow */
+    .slideshow-container {
+      position: relative;
+      max-width: 350px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    .slide {
+      display: none;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      border-radius: 20px;
+      display: block;
+    }
+
+    .caption {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.5);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.9em;
+    }
+
+    .fade {
+      animation: fadeEffect 1s ease-in-out;
+    }
+
+    @keyframes fadeEffect {
+      from { opacity: 0.4; }
+      to { opacity: 1; }
+    }
+
+    /* Music Button */
+    .music-control {
+      margin-top: 20px;
+    }
+
+    .btn {
+      background: #ff6b81;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #ff4757;
+      transform: scale(1.05);
+    }
+
+    .heart {
+      color: #fff;
+      font-size: 1.2em;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Spesial 3 Oktober ✨</h1>
+
+  <div class="slideshow-container">
+    <div class="slide fade">
+      <img src="1.jpg" alt="Foto 1">
+      <div class="caption">Kebersamaan kita, penuh tawa dan cinta ❤️</div>
+    </div>
+    <div class="slide fade">
+      <img src="2.jpg" alt="Foto 2">
+      <div class="caption">Setiap senyummu, bahagiaku 🌸</div>
+    </div>
+    <div class="slide fade">
+      <img src="3.jpg" alt="Foto 3">
+      <div class="caption">Momen kecil, tapi berarti besar 💫</div>
+    </div>
+    <div class="slide fade">
+      <img src="4.jpg" alt="Foto 4">
+      <div class="caption">Hari ini, aku bersyukur memilikimu 💕</div>
+    </div>
+  </div>
+
+  <div class="music-control">
+    <button class="btn" onclick="toggleMusic()">
+      <span class="heart">❤️</span> <span id="btnText">Play Lagu</span>
+    </button>
+  </div>
+
+  <audio id="bgMusic" src="Ungu Feat. Andien - Saat Bahagia  VC Trinity.mp3"></audio>
+
+  <script>
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".slide");
+    const music = document.getElementById("bgMusic");
+    const btnText = document.getElementById("btnText");
+
+    function showSlides() {
+      slides.forEach(slide => slide.style.display = "none");
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1; }
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 5000); // Ganti tiap 4 detik
+    }
+    showSlides();
+
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        btnText.textContent = "Pause Lagu";
+      } else {
+        music.pause();
+        btnText.textContent = "Play Lagu";
+      }
+    }
+  </script>
+</body>
+</html>
