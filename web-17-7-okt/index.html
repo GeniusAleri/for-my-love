@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Oktober - Untuk Kamu 💞</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, #ffe1f2, #f8c8dc, #f9a1bc);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 900px;
+      width: 95%;
+      margin: 20px;
+    }
+
+    /* Gambar */
+    .image-section {
+      flex: 0.8;
+      /* lebih kecil dari teks */
+      position: relative;
+      height: 350px;
+    }
+
+    .image-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      border-right: 3px solid #e84a7a;
+      animation: fade 1s ease-in-out;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Teks */
+    .text-section {
+      flex: 1.2;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+    }
+
+    .text-section h1 {
+      color: #e84a7a;
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+
+    .text {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #444;
+      border-left: 4px solid #e84a7a;
+      padding-left: 15px;
+      min-height: 100px;
+    }
+
+    /* Tombol musik */
+    .music-control {
+      margin-top: 30px;
+    }
+
+    .btn {
+      background: #e84a7a;
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #ff7ba2;
+      transform: scale(1.05);
+    }
+
+    /* Responsif */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .image-section {
+        height: 250px;
+        flex: none;
+      }
+
+      .text-section {
+        text-align: center;
+        padding: 20px;
+      }
+
+      .text {
+        border-left: none;
+        border-top: 3px solid #e84a7a;
+        padding-top: 10px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .text-section h1 {
+        font-size: 1.4em;
+      }
+
+      .text {
+        font-size: 0.95em;
+      }
+
+      .btn {
+        padding: 10px 18px;
+        font-size: 0.9em;
+      }
+
+      .image-section {
+        height: 200px;
+      }
+    }
+
+    /* Confetti */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="confetti"></canvas>
+
+  <div class="container">
+    <div class="image-section">
+      <img src="1.jpg" alt="Foto 1" class="slide">
+      <img src="2.jpg" alt="Foto 2" class="slide">
+      <img src="3.jpg" alt="Foto 3" class="slide">
+      <img src="4.jpg" alt="Foto 4" class="slide">
+      <img src="5.jpg" alt="Foto 5" class="slide">
+      <img src="6.jpg" alt="Foto 6" class="slide">
+      <img src="7.jpg" alt="Foto 7" class="slide">
+      <img src="8.jpg" alt="Foto 8" class="slide">
+      <img src="9.jpg" alt="Foto 9" class="slide">
+    </div>
+
+    <div class="text-section">
+      <h1>💞 7 Oktober 2025 💞</h1>
+      <div class="text" id="typingText"></div>
+      <div class="music-control">
+        <button class="btn" id="btnText" onclick="toggleMusic()">▶️ Play Lagu</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="Chrisye - Cintaku (Lirik & Akustik Cover oleh Eclat).mp3"></audio>
+
+  <script>
+    // Slideshow
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".slide");
+    const durations = [5000,5000,5000,5000,5000,5000,5000,5000,5000]; // durasi per foto
+
+    function showSlides() {
+      slides.forEach(s => s.style.display = "none");
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1; }
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, durations[slideIndex - 1]);
+    }
+    showSlides();
+
+    // Typing effect
+    const textElement = document.getElementById("typingText");
+    const messages = [
+      "Hallooww babyyy heheheheheehhehehehehe 💗",
+      "Huaaaaa akuu bingungg mauu ngetikk apaa wkwkwkw 💕",
+      "Tapii ga bosen bosenn akuu mauu bilangg, I LOVE U SO MUCH BABYYYY 💫",
+      "I LOVE U LAGIII DEH SAYANGGG 🌷",
+      "AAAAAYYYLLLLOOOPPPYUUUUUU BABYYYY 💖",
+      "Sayanggkuu, harii ini harii selasaa 💗",
+      "Tauu gaa apa yang spesial darii harii selasaa?? 💕",
+      "karenaaa akuuu mau selasamanyaa samaa kamuuuu 💫",
+      "wkwkwkwkkwk ga nyambungg yaakk 🌷",
+      "yaudahhh aahh udahh, bingungg mauu bilangg apaa lagii 💖",
+      "SEMANGATT YAA SAYANGGKUU CINTAKUUU MENJALANII HARII INII, MUAACCHHH",
+    ];
+    let msgIndex = 0;
+    let charIndex = 0;
+
+    function typeText() {
+      if (charIndex < messages[msgIndex].length) {
+        textElement.textContent += messages[msgIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, 70);
+      } else {
+        setTimeout(() => {
+          textElement.textContent = "";
+          charIndex = 0;
+          msgIndex = (msgIndex + 1) % messages.length;
+          typeText();
+        }, 3000);
+      }
+    }
+    typeText();
+
+    // Music
+    const music = document.getElementById("bgMusic");
+    const btnText = document.getElementById("btnText");
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+        btnText.textContent = "⏸️ Pause Lagu";
+      } else {
+        music.pause();
+        btnText.textContent = "▶️ Play Lagu";
+      }
+    }
+
+    // Confetti animasi
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let confetti = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function random(min, max) { return Math.random() * (max - min) + min; }
+
+    for (let i = 0; i < 100; i++) {
+      confetti.push({
+        x: random(0, canvas.width),
+        y: random(0, canvas.height),
+        r: random(3, 6),
+        d: random(2, 5),
+        color: `hsl(${random(0, 360)}, 70%, 60%)`
+      });
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+      });
+      updateConfetti();
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function updateConfetti() {
+      confetti.forEach(c => {
+        c.y += c.d;
+        if (c.y > canvas.height) {
+          c.y = 0;
+          c.x = random(0, canvas.width);
+        }
+      });
+    }
+    drawConfetti();
+  </script>
+</body>
+
+</html>
