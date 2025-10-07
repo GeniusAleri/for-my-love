@@ -35,7 +35,7 @@
       flex: 0.8;
       /* lebih kecil dari teks */
       position: relative;
-      height: 350px;
+      max-height: 550px;
     }
 
     .image-section img {
@@ -110,8 +110,7 @@
       }
 
       .image-section {
-        height: 250px;
-        flex: none;
+        height: 550px;
       }
 
       .text-section {
@@ -189,7 +188,7 @@
     // Slideshow
     let slideIndex = 0;
     const slides = document.querySelectorAll(".slide");
-    const durations = [5000,5000,5000,5000,5000,5000,5000,5000,5000]; // durasi per foto
+    const durations = [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000]; // durasi per foto
 
     function showSlides() {
       slides.forEach(s => s.style.display = "none");
