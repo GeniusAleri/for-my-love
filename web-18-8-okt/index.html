@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>8 Oktober — Surprise Interaktif 💜</title>
+  <style>
+    :root {
+      --purple-1: #e9d5ff;
+      --purple-2: #c084fc;
+      --accent: #ff96c5;
+      --text: #32124d;
+      --muted: #6b2ca3;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(135deg, var(--purple-1), #f8e1ff);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Wrapper */
+    .stage {
+      width: 100%;
+      max-width: 980px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(92, 40, 120, 0.12);
+      overflow: hidden;
+    }
+
+    /* PRE-SCREEN */
+    .pre {
+      padding: 36px;
+      text-align: center;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .pre h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: var(--muted);
+    }
+
+    .pre p {
+      margin: 0;
+      color: #5b376a;
+      max-width: 720px;
+    }
+
+    /* moving area */
+    .play-area {
+      position: relative;
+      width: 90%;
+      max-width: 560px;
+      height: 220px;
+      margin-top: 6px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fff, #fffefc);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+    }
+
+    /* the jokey button */
+    .trick-btn {
+      position: absolute;
+      left: 50%;
+      top: 60%;
+      transform: translate(-50%, -50%);
+      padding: 12px 20px;
+      background: linear-gradient(90deg, var(--purple-2), var(--accent));
+      color: white;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 8px 18px rgba(176, 92, 214, 0.28);
+      transition: transform .18s ease, box-shadow .18s;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .trick-btn:active {
+      transform: translate(-50%, -50%) scale(.98);
+    }
+
+    .hint-line {
+      font-size: .95rem;
+      color: #6b2ca3;
+      margin-top: 8px;
+    }
+
+    /* modal password */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 6, 16, 0.4);
+      z-index: 70;
+      padding: 20px;
+    }
+
+    .modal .card {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(10, 10, 20, 0.12);
+      text-align: center;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #e6d6ff;
+      margin-top: 12px;
+      font-size: 1rem;
+    }
+
+    .modal .note {
+      margin-top: 10px;
+      color: #6b2ca3;
+      font-size: .95rem;
+    }
+
+    /* MAIN SCREEN (hidden initially) */
+    .main {
+      display: none;
+      padding: 22px;
+      gap: 20px;
+    }
+
+    .main .top {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    /* left: slideshow (fixed smaller images) */
+    .slideshow {
+      flex: 0.9;
+      max-width: 480px;
+      min-width: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #faf5ff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .slide {
+      position: relative;
+      width: 100%;
+      height: 260px;
+      display: none;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .caption {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      background: rgba(0, 0, 0, 0.45);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      text-align: left;
+    }
+
+    /* right: text and controls */
+    .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+
+    .info h2 {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.25rem;
+    }
+
+    .info p {
+      margin: 0;
+      color: #3c2550;
+      line-height: 1.55;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-play {
+      background: linear-gradient(90deg, var(--purple-2), var(--accent));
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(176, 92, 214, 0.22);
+    }
+
+    .btn-small {
+      background: #f4edf8;
+      border: 1px solid #f0e0ff;
+      padding: 9px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: var(--muted);
+    }
+
+    /* nice transition when revealing main */
+    .fade-in {
+      animation: fadeInUp .5s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* responsive */
+    @media (max-width:900px) {
+      .main .top {
+        flex-direction: column;
+        align-items: center
+      }
+
+      .slideshow .slide {
+        height: 220px
+      }
+
+      .slideshow {
+        width: 100%
+      }
+    }
+
+    @media (max-width:480px) {
+      .pre p {
+        font-size: .95rem
+      }
+
+      .play-area {
+        height: 180px
+      }
+
+      .slideshow .slide {
+        height: 180px
+      }
+
+      .info h2 {
+        font-size: 1.05rem
+      }
+
+      .info p {
+        font-size: .95rem
+      }
+    }
+
+    /* small helper */
+    .muted {
+      color: #7b5aa3;
+      font-size: .95rem
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stage" role="main" aria-live="polite">
+    <!-- PRE-SCREEN -->
+    <div class="pre" id="preScreen">
+      <h1>Hei... mau baca sesuatu yang lucu? 💜</h1>
+      <p>Klik tombol yang imut ini — tapi hati-hati sayangg, dia suka lari-lari 😜<br>
+        Kamu harus berhasil klik 3x yaa kwkwkw.</p>
+
+      <div class="play-area" id="playArea" aria-hidden="false" style="position: relative; height: 200px;">
+        <button id="trickBtn" class="trick-btn" aria-label="Tombol Ajaib">Klik Aku!</button>
+      </div>
+
+      <div class="hint-line muted">Klik count: <span id="clickCount">0</span> / 3</div>
+      <div class="muted" id="hintText">Kalau sudah 3 klik bakal muncul sesuatuu ...</div>
+    </div>
+
+    <!-- PASSWORD MODAL -->
+    <div class="modal" id="pwModal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="card" role="document">
+        <h3>Ciee berhasill, sekarang masukin password biar lanjut 💌</h3>
+        <input id="pwInput" placeholder="ketik disini..." aria-label="Password input" />
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
+          <button id="pwSubmit" class="btn-small">Kirim</button>
+          <button id="pwCancel" class="btn-small">Batal</button>
+        </div>
+        <div class="note" id="pwNote" style="margin-top:10px;color:#6b2ca3"></div>
+      </div>
+    </div>
+
+    <!-- MAIN SCREEN -->
+    <div class="main" id="mainScreen" aria-hidden="true">
+      <div style="padding:20px 28px; height: fit-content;">
+        <div class="top fade-in">
+          <div class="slideshow" id="slideshow">
+            <div class="slide"><img src="1.jpg" alt="foto 1">
+              <div class="caption">TOLONGGG</div>
+            </div>
+            <div class="slide"><img src="2.jpg" alt="foto 2">
+              <div class="caption">KEHABISSANNNN</div>
+            </div>
+            <div class="slide"><img src="3.webp" alt="foto 3">
+              <div class="caption">STTOOOKKKK</div>
+            </div>
+            <div class="slide"><img src="4.webp" alt="foto 4">
+              <div class="caption">FOTOOOOO</div>
+            </div>
+          </div>
+
+          <div class="info">
+
+            <h2>💞 8 Oktober 2025, For My Purple 💜</h2>
+            <p id="mainText">Hallooww sayanggkuu wkkwwkw, sepertii biasaaa akuu bingungg mau nuliss apaa wkwk</p>
+            <p id="mainText">Mau ini aja deh, kamu tau ga oktober itu O nya apa, K nya apa, T nya apa, O Nya apa, B nya
+              apa, E nya apa, R nya apa??</p>
+            <p id="mainText">JADIII OKTOBER ITUUU</p>
+            <p id="mainText">O rang yang paling</p>
+            <p id="mainText">K usayang hingga detik ini</p>
+            <p id="mainText">T idak ada yang lain, selain kamu</p>
+            <p id="mainText">O rang yang paling</p>
+            <p id="mainText">B erharga adanya, hanya kamu, sayang</p>
+            <p id="mainText">E engkau adalah</p>
+            <p id="mainText">R umahku buat selamanyaa.</p>
+
+            <div class="controls">
+              <button id="playBtn" class="btn-play" aria-pressed="false">▶️ Putar / Pause Lagu</button>
+              <button id="confettiBtn" class="btn-small">🎉 Surprise</button>
+              <div class="muted">Tap gambar untuk ganti manual • Slide otomatis juga berjalan</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- audio -->
+  <audio id="bgAudio" src="Rizky Febian & Adrian Khalif - Alamak (Official Lyric Video).mp3" preload="auto"></audio>
+
+  <!-- confetti lib (small) -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    // ---------- PRE-SCREEN INTERACTION ----------
+    const trickBtn = document.getElementById('trickBtn');
+    const playArea = document.getElementById('playArea');
+    const clickCountSpan = document.getElementById('clickCount');
+    const hintText = document.getElementById("hintText");
+
+    const buttonTexts = [
+      "Eh jangan pencet aku 😝",
+      "Ih kok ngejar-ngejar sih 😳",
+      "Heheh dapet lagi 😘",
+      "Sini dong sayangg 💕",
+      "Aku malu nih 🙈",
+      "Aduh kamu lucuu 😍",
+    ];
+
+    let clickCount = 0;
+
+    // move button to random position inside playArea (keeps button fully inside)
+    function moveBtnRandom() {
+      const areaRect = playArea.getBoundingClientRect();
+      const btnRect = trickBtn.getBoundingClientRect();
+      // available space
+      const padding = 12;
+      const maxX = Math.max(0, areaRect.width - btnRect.width - padding * 2);
+      const maxY = Math.max(0, areaRect.height - btnRect.height - padding * 2);
+      const x = Math.random() * maxX + padding;
+      const y = Math.random() * maxY + padding;
+      trickBtn.style.left = x + 'px';
+      trickBtn.style.top = y + 'px';
+      trickBtn.style.transform = 'translate(0,0)';
+    }
+
+    // start center
+    trickBtn.style.left = '50%';
+    trickBtn.style.top = '60%';
+    trickBtn.style.transform = 'translate(-50%,-50%)';
+
+    // on hover move a bit (playful)
+    trickBtn.addEventListener('mouseenter', () => {
+      moveBtnRandom();
+    });
+
+    // on click count, move and increment
+    trickBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      clickCount++;
+      clickCountSpan.textContent = clickCount;
+      // small pulse
+      trickBtn.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 220 });
+      // move
+      trickBtn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
+      moveBtnRandom();
+      if (clickCount === 2) {
+        trickBtn.textContent = "yuu bisa yuu 1x lagii 💕";
+      }
+
+      if (clickCount >= 3) {
+        // show modal
+        showPasswordModal();
+      }
+    });
+
+    // ---------- PASSWORD MODAL ----------
+    const pwModal = document.getElementById('pwModal');
+    const pwInput = document.getElementById('pwInput');
+    const pwSubmit = document.getElementById('pwSubmit');
+    const pwCancel = document.getElementById('pwCancel');
+    const pwNote = document.getElementById('pwNote');
+
+    function showPasswordModal() {
+      pwModal.style.display = 'flex';
+      pwModal.setAttribute('aria-hidden', 'false');
+      pwInput.focus();
+      // reset note
+      pwNote.textContent = '';
+    }
+
+    function hidePasswordModal() {
+      pwModal.style.display = 'none';
+      pwModal.setAttribute('aria-hidden', 'true');
+    }
+
+    pwCancel.addEventListener('click', () => {
+      hidePasswordModal();
+    });
+
+    // correct password (normalized)
+    const CORRECT = 'i love u alee sayangg';
+
+    pwSubmit.addEventListener('click', () => {
+      const val = pwInput.value.trim().toLowerCase();
+      if (val === CORRECT) {
+        hidePasswordModal();
+        openMainScreen();
+      } else {
+        // show the "hint" as required
+        pwNote.textContent = 'passwordnya : i love u alee sayangg';
+        // keep modal open for another try
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    });
+
+    // allow Enter key
+    pwInput.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') pwSubmit.click();
+      if (ev.key === 'Escape') pwCancel.click();
+    });
+
+    // ---------- SHOW MAIN ----------
+    const preScreen = document.getElementById('preScreen');
+    const mainScreen = document.getElementById('mainScreen');
+
+    function openMainScreen() {
+      // hide pre
+      preScreen.style.display = 'none';
+      // show main
+      mainScreen.style.display = 'block';
+      mainScreen.setAttribute('aria-hidden', 'false');
+
+      // init slideshow and others (start)
+      initSlideShow();
+    }
+
+    // ---------- SLIDESHOW ----------
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let slideIdx = 0;
+    let slideTimer = null;
+    // durations array (ms) can be customized
+    const durations = [4000, 6000, 5000, 4500];
+
+    function showSlide(i) {
+      slides.forEach((s, idx) => {
+        s.style.display = (idx === i) ? 'block' : 'none';
+      });
+    }
+
+    function initSlideShow() {
+      slideIdx = 0;
+      showSlide(slideIdx);
+      scheduleNext();
+      // add click to manually next
+      slides.forEach(s => s.addEventListener('click', () => {
+        clearTimeout(slideTimer);
+        slideIdx = (slideIdx + 1) % slides.length;
+        showSlide(slideIdx);
+        scheduleNext();
+      }));
+    }
+
+    function scheduleNext() {
+      clearTimeout(slideTimer);
+      slideTimer = setTimeout(() => {
+        slideIdx = (slideIdx + 1) % slides.length;
+        showSlide(slideIdx);
+        scheduleNext();
+      }, durations[slideIdx]);
+    }
+
+    // ---------- AUDIO & CONFETTI ----------
+    const audio = document.getElementById('bgAudio');
+    const playBtnMain = document.getElementById('playBtn');
+    const confettiBtn = document.getElementById('confettiBtn');
+
+    playBtnMain.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play().catch(() => {/* autoplay blocked until user gesture - but we have click */ });
+        playBtnMain.textContent = '⏸️ Pause Lagu';
+        // small confetti burst
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.6 }
+        });
+      } else {
+        audio.pause();
+        playBtnMain.textContent = '▶️ Putar / Pause Lagu';
+      }
+    });
+
+    confettiBtn.addEventListener('click', () => {
+      confetti({
+        particleCount: 180,
+        spread: 120,
+        origin: { y: 0.5 }
+      });
+    });
+
+    // ---------- accessibility: allow escape modal by clicking background ----------
+    pwModal.addEventListener('click', (e) => {
+      if (e.target === pwModal) hidePasswordModal();
+    });
+
+    // ensure initial button positioned nicely on small screens after layout
+    window.addEventListener('resize', () => {
+      // keep trickBtn inside area on resize
+      moveBtnRandom();
+    });
+  </script>
+</body>
+
+</html>
