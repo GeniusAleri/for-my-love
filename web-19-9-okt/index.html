@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>9 Oktober — Kuis Interaktif 💞</title>
+  <style>
+    :root {
+      --bg1: #fbe8ff;
+      --bg2: #e0b3ff;
+      --accent: #c084fc;
+      --muted: #5b376a;
+      --card: #ffffff;
+      --round: 14px;
+      --maxw: 980px;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(160deg, var(--bg1), #fff8fb 60%);
+      color: #2d1b3a;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Stage */
+    .stage {
+      width: 100%;
+      max-width: var(--maxw);
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 14px 40px rgba(92, 40, 120, 0.12);
+      overflow: hidden;
+    }
+
+    /* Top bar */
+    .topbar {
+      padding: 18px 22px;
+      background: linear-gradient(90deg, var(--accent), #f9a8d4);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.2px;
+    }
+
+    .topbar .date {
+      font-size: 0.9rem;
+      opacity: 0.95
+    }
+
+    .content {
+      display: flex;
+      gap: 20px;
+      padding: 22px;
+      align-items: flex-start;
+    }
+
+    /* slideshow */
+    .slideshow {
+      flex: 0.95;
+      min-width: 220px;
+      max-width: 520px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff8ff;
+      box-shadow: 0 6px 18px rgba(176, 92, 214, 0.06);
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 320px;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .caption {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      background: rgba(0, 0, 0, 0.42);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+    }
+
+    /* info / controls */
+    .info {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .info h2 {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.2rem;
+    }
+
+    .info p {
+      margin: 0;
+      color: #3c2550;
+      line-height: 1.55;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, var(--accent), #f9a8d4);
+      box-shadow: 0 8px 18px rgba(176, 92, 214, 0.18);
+    }
+
+    .btn-muted {
+      background: #fff;
+      color: var(--muted);
+      border: 1px solid #f0e0ff;
+      box-shadow: none;
+      padding: 9px 12px;
+      border-radius: 10px;
+    }
+
+    .small-note {
+      color: #8b6aa7;
+      font-size: 0.92rem;
+    }
+
+    /* modal quiz (popup) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 6, 16, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 18px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 960px;
+      height: 400px;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(10, 10, 20, 0.18);
+    }
+
+    .modal h3 {
+      margin: 0 0 6px 0;
+      color: var(--muted)
+    }
+
+    .question {
+      margin: 12px 0;
+      font-size: 1.05rem
+    }
+
+    .field {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .field input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      font-size: 1rem;
+    }
+
+    .field button {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      font-weight: 600
+    }
+
+    .feedback {
+      margin-top: 10px;
+      color: #b74a8f;
+      min-height: 20px
+    }
+
+    /* responsive */
+    @media (max-width:900px) {
+      .content {
+        flex-direction: column;
+        padding: 16px
+      }
+
+      .slide {
+        height: 220px
+      }
+
+      .modal {
+        max-width: 92%
+      }
+    }
+
+    @media (max-width:480px) {
+      .slide {
+        height: 180px
+      }
+
+      .info h2 {
+        font-size: 1rem
+      }
+
+      .topbar h1 {
+        font-size: 0.98rem
+      }
+    }
+
+    /* little animation helpers */
+    .floaty {
+      animation: floaty 3s ease-in-out infinite;
+    }
+
+    @keyframes floaty {
+      0% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-6px)
+      }
+
+      100% {
+        transform: translateY(0)
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stage" aria-live="polite">
+    <div class="topbar">
+      <h1>✨ 9 Oktober — Surprise Babyy</h1>
+      <div class="date">9 Oktober 2025</div>
+    </div>
+
+    <div class="content">
+      <div class="slideshow" id="slideshow">
+        <div class="slide"><img src="1.jpg" alt="foto 1">
+        </div>
+        <div class="slide"><img src="2.jpg" alt="foto 2">
+        </div>
+        <div class="slide"><img src="3.webp" alt="foto 3">
+        </div>
+        <div class="slide"><img src="4.webp" alt="foto 4">
+        </div>
+      </div>
+
+      <div class="info">
+        <h2>Hai sayang 💜</h2>
+        <p id="mainText">Sayanggg, maaf yaa aku bikin link nyaa sekarang siangg teruss hehehe, paginyaa sukaa ngantukk
+          huhuhu, tapiii gapapaa kaann kalo siangg jugaa hehehee, btw khusus hari ini akuu mau bilang makasihh yaa
+          sayangg, makasihh udah mau di repotin sama akuu buat bikin cv hihihi, makasii jugaa kamu udah mau temenin akuu
+          dirumaahh ini walaupun vc yaa, dan makasii jugaa sampe sekarangg kamuu masih sama akuu, semogaa kitaa teruss
+          samaa samaa yaa saynagg, love u babyyy 💘</p>
+
+        <div class="controls">
+          <button id="playMain" class="btn">▶️ Putar / Pause Lagu</button>
+          <button id="confettiBtn" class="btn-muted">🎉 Surprise</button>
+          <div class="small-note">Tap foto untuk ganti • Quiz muncul otomatis</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ MODAL (initially visible) -->
+  <div class="modal-backdrop" id="quizBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" id="quizModal">
+      <h3>Yuk coba teka-teki kecil dulu 💞</h3>
+      <p class="muted">Jawab benar 3 soal supaya bisa lanjut ke surprise utama.</p>
+
+      <!-- Question area -->
+      <div id="questionArea" style="margin-top:14px">
+        <!-- content populated by JS -->
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <!-- audio -->
+  <audio id="bgAudio" src="TULUS - Jatuh Suka (Official Lyric Video).mp3" preload="auto"></audio>
+
+  <!-- confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    // ---------- Quiz logic ----------
+    const quizBackdrop = document.getElementById('quizBackdrop');
+    const questionArea = document.getElementById('questionArea');
+    const feedback = document.getElementById('feedback');
+
+    // random simple math generator
+    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    // Tambahkan di bagian atas script
+    let answersHistory = JSON.parse(localStorage.getItem("jawaban_semua")) || [];
+
+    // Fungsi untuk menyimpan jawaban ke localStorage
+    function saveAnswer(questionText, userAnswer, correctAnswer) {
+      const entry = {
+        question: questionText,
+        answer: userAnswer,
+        correctAnswer: correctAnswer,
+        time: new Date().toLocaleString()
+      };
+      answersHistory.push(entry);
+      localStorage.setItem("jawaban_semua", JSON.stringify(answersHistory));
+    }
+
+
+    // questions array (we will generate at runtime)
+    const questions = [];
+
+    // Q1: addition (two numbers 2..9)
+    const a1 = randInt(2, 9), b1 = randInt(2, 9);
+    questions.push({
+      type: 'add',
+      prompt: `${a1} + ${b1} = ?`,
+      answer: (a1 + b1).toString()
+    });
+
+    // Q2: multiplication (2..9)
+    const a2 = randInt(2, 8), b2 = randInt(2, 8);
+    questions.push({
+      type: 'mul',
+      prompt: `${a2} × ${b2} = ?`,
+      answer: (a2 * b2).toString()
+    });
+
+    // Q3: romantic key (text)
+    // expected answer (normalized) -> accept a couple of reasonable variants
+    const romanticAccepted = [
+      'selamanyaa sayangg',
+      'selamanya sayang',
+      'selamanya sayangg',
+      'selamanyaa sayang'
+    ];
+    questions.push({
+      type: 'love',
+      prompt: `aku + kamu = ? (jawab pakai kata ya)`,
+      answer: romanticAccepted // array
+    });
+
+
+    let currentIdx = 0;
+
+    function renderQuestion(idx) {
+      feedback.textContent = '';
+      const q = questions[idx];
+      questionArea.innerHTML = `
+        <div class="question"><strong>Soal ${idx + 1}:</strong> ${q.prompt}</div>
+        <div class="field">
+          <input id="ansInput" type="text" autocomplete="off" placeholder="Tulis jawaban...">
+          <button id="ansBtn">Jawab</button>
+        </div>
+      `;
+      const input = document.getElementById('ansInput');
+      const btn = document.getElementById('ansBtn');
+      input.focus();
+
+      btn.addEventListener('click', () => checkAnswer(idx));
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkAnswer(idx);
+      });
+    }
+
+    function normalizeText(s) {
+      return s.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function checkAnswer(idx) {
+      const q = questions[idx];
+      const val = document.getElementById('ansInput').value.trim();
+      if (!val) {
+        feedback.textContent = 'Isi dulu ya sayang 😊';
+        return;
+      }
+
+      if (q.type === 'add' || q.type === 'mul') {
+        if (val === q.answer) {
+          // correct
+          feedback.style.color = '#2b7a4b';
+          feedback.textContent = 'Benar! ✅ Lanjut...';
+          setTimeout(() => {
+            currentIdx++;
+            if (currentIdx < questions.length) renderQuestion(currentIdx);
+            else quizSuccess();
+          }, 800);
+        } else {
+          feedback.style.color = '#b43a6a';
+          feedback.textContent = 'Waduh salah, coba lagi ya 💪';
+          // small shake
+          document.getElementById('ansInput').animate([{ transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 });
+        }
+      } else if (q.type === 'love') {
+        const norm = normalizeText(val);
+        saveAnswer(q.q, val, 'selamanyaa sayangg');
+
+        if (q.answer.some(a => normalizeText(a) === norm)) {
+
+          feedback.style.color = '#2b7a4b';
+          feedback.textContent = 'Aku tahu kamu pintar 😘';
+          setTimeout(() => quizSuccess(), 700);
+        } else {
+          // show hint as requested
+          feedback.style.color = '#b43a6a';
+          feedback.innerHTML = `Ups belum tepat — Hint: jawabannya... <strong>selamanyaa sayangg</strong> 💕`;
+          document.getElementById('ansInput').value = '';
+          document.getElementById('ansInput').focus();
+        }
+      }
+    }
+
+    // start quiz on load
+    renderQuestion(currentIdx);
+
+    // ---------- When quiz passes ----------
+    const slideshow = document.getElementById('slideshow');
+    const slides = Array.from(slideshow.querySelectorAll('.slide'));
+    const durations = [4000, 5000, 4500, 5000];
+    let slideI = 0, slideTimer = null;
+
+    function initSlideshow() {
+      slideI = 0;
+      showSlide(slideI);
+      scheduleNext();
+      // allow clicking a slide to advance
+      slides.forEach(s => s.addEventListener('click', () => {
+        clearTimeout(slideTimer);
+        slideI = (slideI + 1) % slides.length;
+        showSlide(slideI);
+        scheduleNext();
+      }));
+    }
+    function showSlide(i) {
+      slides.forEach((s, idx) => s.style.display = (idx === i) ? 'block' : 'none');
+    }
+    function scheduleNext() {
+      clearTimeout(slideTimer);
+      slideTimer = setTimeout(() => {
+        slideI = (slideI + 1) % slides.length;
+        showSlide(slideI);
+        scheduleNext();
+      }, durations[slideI]);
+    }
+
+    // quiz success -> hide modal, show confetti and init slideshow
+    function quizSuccess() {
+      // brief confetti celebration
+      confetti({
+        particleCount: 120,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+
+      // hide modal
+      quizBackdrop.style.display = 'none';
+
+      // start main interactions
+      initSlideshow();
+    }
+
+    // ---------- audio & controls ----------
+    const bgAudio = document.getElementById('bgAudio');
+    const playMain = document.getElementById('playMain');
+    const confettiBtn = document.getElementById('confettiBtn');
+
+    playMain.addEventListener('click', () => {
+      if (bgAudio.paused) {
+        bgAudio.play().catch(() => { });
+        playMain.textContent = '⏸️ Pause Lagu';
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+      } else {
+        bgAudio.pause();
+        playMain.textContent = '▶️ Putar / Pause Lagu';
+      }
+    });
+
+    confettiBtn.addEventListener('click', () => {
+      confetti({ particleCount: 180, spread: 120, origin: { y: 0.5 } });
+    });
+
+    // accessibility: allow ESC to close feedback/hints (does not skip quiz)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        feedback.textContent = '';
+      }
+    });
+
+    // ensure modal centered when resizing
+    window.addEventListener('resize', () => {
+      // no-op for now but keeps UI stable for responsive
+    });
+
+  </script>
+</body>
+
+</html>
