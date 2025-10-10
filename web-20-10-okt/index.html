@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle Kata Cinta 💖</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffd6e8, #f9a1c6);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    h1 {
+      color: #e84a7a;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .puzzle-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 400px;
+      gap: 10px;
+    }
+
+    .word {
+      background: white;
+      border: 2px solid #e84a7a;
+      color: #e84a7a;
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.2s ease, background 0.3s;
+      font-weight: 500;
+    }
+
+    .word:hover {
+      transform: scale(1.1);
+      background: #ffe1f2;
+    }
+
+    .success {
+      font-size: 1.4em;
+      color: #e84a7a;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Love animation */
+    .love {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff4b8b;
+      font-size: 24px;
+      animation: float 5s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-800px) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    button {
+      background: #e84a7a;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 25px;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ff7ba2;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.4em;
+      }
+
+      .word {
+        padding: 8px 16px;
+        font-size: 0.95em;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+      }
+    }
+
+    #downloadBtn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff7ba2, #e84a7a);
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      margin-top: 20px;
+      font-weight: 500;
+      transition: 0.3s ease;
+    }
+
+    #downloadBtn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #ff9ebf, #ff6b93);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>💖 Puzzle Kata Cinta 💖</h1>
+  <p>Susun kata cintanya biar aku tau seberapa sayang kamu 😘</p>
+
+  <div class="puzzle-container" id="puzzle"></div>
+  <div class="success" id="message"></div>
+  <a id="downloadBtn" href="Sertifikat Cinta.pdf" download="Sertifikat_Cinta.pdf" class="hidden">💌 Download Akuu donggg
+    Cinta</a>
+
+  <button id="resetBtn">Ulangi Puzzle</button>
+  <button id="musicBtn">🎵 Putar Lagu</button>
+
+  <audio id="bgMusic" src="Jaz - Bersamamu (Official Lyric Video).mp3"></audio>
+
+  <div class="love" id="loveContainer"></div>
+
+  <script>
+    const words = ["Aku", "akan", "selalu", "mencintai", "kamu", "sayangkuu 💖"];
+    let shuffled = [];
+    const puzzle = document.getElementById("puzzle");
+    const message = document.getElementById("message");
+    const music = document.getElementById("bgMusic");
+    const loveContainer = document.getElementById("loveContainer");
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function renderPuzzle() {
+      puzzle.innerHTML = "";
+      shuffled.forEach((word, index) => {
+        const div = document.createElement("div");
+        div.classList.add("word");
+        div.textContent = word;
+        div.draggable = true;
+        div.dataset.index = index;
+        puzzle.appendChild(div);
+      });
+    }
+
+    function checkAnswer() {
+      const current = Array.from(puzzle.children).map(w => w.textContent.trim());
+      if (JSON.stringify(current) === JSON.stringify(words)) {
+        message.innerHTML = "Awww kamu berhasil 😍<br> Aku juga akan selalu cinta dan sayangg sama kamu babyy 💞";
+        startLoveAnimation();
+        music.play();
+        downloadBtn.classList.remove("hidden"); // tampilkan tombol download
+      } else {
+        message.textContent = "";
+        downloadBtn.classList.add("hidden"); // sembunyikan kalau belum benar
+      }
+    }
+
+    let draggedItem = null;
+
+    puzzle.addEventListener("dragstart", e => {
+      draggedItem = e.target;
+      e.target.style.opacity = 0.5;
+    });
+
+    puzzle.addEventListener("dragend", e => {
+      e.target.style.opacity = "";
+    });
+
+    puzzle.addEventListener("dragover", e => e.preventDefault());
+
+    puzzle.addEventListener("drop", e => {
+      e.preventDefault();
+      if (e.target.classList.contains("word") && e.target !== draggedItem) {
+        const items = Array.from(puzzle.children);
+        const fromIndex = items.indexOf(draggedItem);
+        const toIndex = items.indexOf(e.target);
+        if (fromIndex > -1 && toIndex > -1) {
+          puzzle.insertBefore(draggedItem, fromIndex < toIndex ? e.target.nextSibling : e.target);
+          checkAnswer();
+        }
+      }
+    });
+
+    function startLoveAnimation() {
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.textContent = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 3 + Math.random() * 3 + "s";
+        loveContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      shuffled = shuffle([...words]);
+      renderPuzzle();
+      downloadBtn.classList.add("hidden"); // sembunyikan kalau belum benar
+      message.textContent = "";
+    });
+
+    document.getElementById("musicBtn").addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+        document.getElementById("musicBtn").textContent = "⏸️ Jeda Lagu";
+      } else {
+        music.pause();
+        document.getElementById("musicBtn").textContent = "🎵 Putar Lagu";
+      }
+    });
+
+    shuffled = shuffle([...words]);
+    renderPuzzle();
+  </script>
+</body>
+
+</html>
