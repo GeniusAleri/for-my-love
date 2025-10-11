@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>11 Oktober — Spin the Love Wheel (Purple Dreamy)</title>
+  <style>
+    :root {
+      --bg1: #f3e8ff;
+      --bg2: #e9d5ff;
+      --purple-1: #c084fc;
+      --purple-2: #6d28d9;
+      --accent: #a78bfa;
+      --card: #ffffff;
+      --muted: #44275b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(160deg, var(--bg1), #fff 60%);
+      color: var(--muted);
+      padding: 20px;
+    }
+
+    .stage {
+      width: 100%;
+      max-width: 1000px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), var(--card));
+      border-radius: 18px;
+      box-shadow: 0 14px 40px rgba(92, 40, 120, 0.12);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 18px 22px;
+      background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    header .sub {
+      opacity: 0.95;
+      font-size: 0.95rem;
+    }
+
+    .wrap {
+      display: flex;
+      gap: 20px;
+      padding: 22px;
+      align-items: flex-start;
+    }
+
+    /* Wheel area */
+    .wheel-area {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .wheel-frame {
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1/1;
+      position: relative;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, rgba(200, 160, 255, 0.12), rgba(220, 200, 255, 0.06));
+      box-shadow: inset 0 4px 10px rgba(110, 20, 160, 0.03);
+    }
+
+    /* pointer */
+    .pointer {
+      position: absolute;
+      top: 6px;
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-bottom: 26px solid #fff8ff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      z-index: 30;
+    }
+
+    /* actual wheel (SVG inserted via DOM for crisp slices) */
+    .wheel-svg {
+      width: 92%;
+      height: 92%;
+      border-radius: 50%;
+      transform-origin: 50% 50%;
+      transition: transform 4s cubic-bezier(.2, .9, .2, 1);
+    }
+
+    .spin-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
+      box-shadow: 0 8px 18px rgba(110, 28, 236, 0.12);
+      font-size: 0.95rem;
+    }
+
+    .btn-muted {
+      background: #fff;
+      color: var(--muted);
+      border: 1px solid #efe3ff;
+      box-shadow: none;
+    }
+
+    /* Result card */
+    .result {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), #fff);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(110, 28, 236, 0.06);
+    }
+
+    .card h3 {
+      margin: 0 0 8px 0;
+      color: var(--purple-2);
+    }
+
+    .msg {
+      font-size: 1.05rem;
+      color: #3a1e49;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .history {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-direction: column;
+      max-height: 180px;
+      overflow: auto;
+    }
+
+    .hist-item {
+      background: #faf7ff;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #54305d;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* small note */
+    .note {
+      font-size: 0.92rem;
+      color: #ffffff;
+    }
+
+    /* confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* responsive */
+    @media (max-width:900px) {
+      .wrap {
+        flex-direction: column;
+        padding: 16px;
+      }
+
+      .wheel-frame {
+        max-width: 360px;
+      }
+    }
+
+    @media (max-width:480px) {
+      header {
+        padding: 12px;
+      }
+
+      .wheel-frame {
+        max-width: 320px;
+      }
+
+      .card {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stage" role="main">
+    <header>
+      <div>
+        <h1>💜 Spin the Love Wheel</h1>
+        <div class="sub">11 Oktober 2025 • Purple Dreamy</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="note">Jangan lupaa di spinn yaa babyyy ✨</div>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <div class="wheel-area">
+        <div class="wheel-frame" aria-hidden="false">
+          <div class="pointer" aria-hidden="true"></div>
+          <!-- SVG wheel will be injected here -->
+          <svg class="wheel-svg" id="wheelSvg" viewBox="0 0 500 500" role="img" aria-label="Roda semangat"></svg>
+        </div>
+
+        <div class="spin-controls">
+          <button id="spinBtn" class="btn">🎡 Putar Sekarang</button>
+          <button id="playMusicBtn" class="btn btn-muted">⏯️ Musik</button>
+          <!-- <button id="downloadAllBtn" class="btn btn-muted" title="Download semua history JSON">⬇️ Export JSON</button> -->
+        </div>
+      </div>
+
+      <div class="result">
+        <div class="card">
+          <h3>Hasil</h3>
+          <div class="msg" id="resultText">Belum ada hasil. Putar rodanya dulu yaa 💫</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+            <div class="note">Musik otomatis play saat spin selesai.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Riwayat Spin</h3>
+          <div class="history" id="historyList">
+            <!-- entries -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- audio: local file (ganti 'music.mp3' dengan filemu) -->
+  <audio id="bgMusic" src="Jaz - Teman Bahagia (Official Music Video).mp3" preload="auto"></audio>
+
+  <!-- use canvas-confetti for nice bursts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    /************* SETUP ****************/
+    const slices = [
+      "Kamu selalu keren di mataa akuu sayangg 💪💜",
+      "Jangan lupa istirahat yaa 🌙",
+      "Aku bangga sama kamu 💫",
+      "Kamu tuh hebatt sayangg 💜",
+      "Hari ini pasti bisaa! 🌈",
+      "Senyummu itu penyemangatku 😊",
+      "Jangan nyerah ya, aku selalu dukung kamu 💕",
+      "Terus semangat yaa, aku percaya kamu 💖"
+    ];
+
+    // number of slices
+    const N = slices.length;
+
+    // references
+    const wheelSvg = document.getElementById('wheelSvg');
+    const spinBtn = document.getElementById('spinBtn');
+    const resultText = document.getElementById('resultText');
+    const bgMusic = document.getElementById('bgMusic');
+    const playMusicBtn = document.getElementById('playMusicBtn');
+    const historyList = document.getElementById('historyList');
+    // const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+    // local history key
+    const STORAGE_KEY = 'spin_history_2025_11_10';
+
+    // prepare wheel SVG slices
+    function buildWheel() {
+      const cx = 250, cy = 250, r = 240;
+      wheelSvg.innerHTML = ''; // clear
+      for (let i = 0; i < N; i++) {
+        const start = (i / N) * Math.PI * 2 - Math.PI / 2;
+        const end = ((i + 1) / N) * Math.PI * 2 - Math.PI / 2;
+        const x1 = cx + r * Math.cos(start);
+        const y1 = cy + r * Math.sin(start);
+        const x2 = cx + r * Math.cos(end);
+        const y2 = cy + r * Math.sin(end);
+        const large = (end - start) > Math.PI ? 1 : 0;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z`;
+        path.setAttribute('d', d);
+        // zebra coloring: soft purples
+        const t = i % 2 === 0 ? '#f3e8ff' : '#efe0ff';
+        path.setAttribute('fill', t);
+        path.setAttribute('stroke', '#e9d5ff');
+        path.setAttribute('data-index', i);
+        wheelSvg.appendChild(path);
+
+        // add text label rotated roughly to center of slice
+        const mid = (start + end) / 2;
+        const tx = cx + (r * 0.62) * Math.cos(mid);
+        const ty = cy + (r * 0.62) * Math.sin(mid);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', tx);
+        text.setAttribute('y', ty);
+        text.setAttribute('fill', '#5b3160');
+        text.setAttribute('font-size', '14');
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('alignment-baseline', 'middle');
+        text.setAttribute('transform', `rotate(${(mid * 180 / Math.PI)} ${tx} ${ty})`);
+        text.textContent = slices[i];
+        wheelSvg.appendChild(text);
+      }
+      // center circle (hub)
+      const hub = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      hub.setAttribute('cx', cx);
+      hub.setAttribute('cy', cy);
+      hub.setAttribute('r', 60);
+      hub.setAttribute('fill', '#ffffff');
+      hub.setAttribute('stroke', '#edd7ff');
+      wheelSvg.appendChild(hub);
+
+      // center label
+      const centerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      centerText.setAttribute('x', cx);
+      centerText.setAttribute('y', cy);
+      centerText.setAttribute('fill', '#6b2ca3');
+      centerText.setAttribute('font-size', '16');
+      centerText.setAttribute('text-anchor', 'middle');
+      centerText.setAttribute('alignment-baseline', 'middle');
+      centerText.textContent = 'Spin for Semangat';
+      wheelSvg.appendChild(centerText);
+    }
+
+    buildWheel();
+
+    /************* Spin logic ****************/
+    let spinning = false;
+
+    function randomSpinAngleForIndex(index) {
+      // compute random angle so that pointer at top ( -90deg ) points to the middle of target slice
+      const sliceAngle = 360 / N;
+      const min = index * sliceAngle;
+      const max = (index + 1) * sliceAngle;
+      // want wheel rotation so that pointer at 0deg points to middle of slice
+      const targetMid = (min + max) / 2;
+      // compute rotation to land on that mid + multiple of 360
+      const extraRounds = 4 + Math.floor(Math.random() * 3); // 4-6 rounds
+      const rotation = extraRounds * 360 + (360 - targetMid) + (Math.random() * (sliceAngle * 0.6) - sliceAngle * 0.3);
+      return rotation;
+    }
+
+    function spinWheel() {
+      if (spinning) return;
+      spinning = true;
+      spinBtn.disabled = true;
+      resultText.textContent = 'Memutar roda... 🎡';
+
+      // choose random target index
+      const targetIdx = Math.floor(Math.random() * N);
+
+      // compute rotation
+      const angle = randomSpinAngleForIndex(targetIdx);
+
+      // apply rotation with transition
+      wheelSvg.style.transition = 'transform 3.8s cubic-bezier(.24,.9,.2,1)';
+      wheelSvg.style.transform = `rotate(${angle}deg)`;
+
+      // after animation ends, show result
+      setTimeout(() => {
+        const result = slices[targetIdx];
+        showResult(result);
+        // store history
+        // saveSpinResult(result);
+        // play music automatically (user gesture from the click allows autoplay)
+        if (bgMusic.paused) {
+          try {
+            bgMusic.currentTime = 0;
+            bgMusic.play().catch(() => { /* ignore autoplay rejections */ });
+          } catch (e) { }
+        }
+        // confetti burst
+        confetti({
+          particleCount: 120,
+          spread: 90,
+          origin: { y: 0.6 }
+        });
+        // reset transform softly to avoid huge accumulated rotation; set to stable final angle modulo 360
+        setTimeout(() => {
+          // compute normalized angle so wheel visually stays at same position
+          const normalized = angle % 360;
+          wheelSvg.style.transition = 'none';
+          wheelSvg.style.transform = `rotate(${normalized}deg)`;
+          // next spin ready
+          spinning = false;
+          spinBtn.disabled = false;
+        }, 50);
+      }, 3900);
+    }
+
+    function showResult(text) {
+      resultText.innerHTML = `<strong>${text}</strong>`;
+      // animate result box lightly
+      resultText.animate([{ transform: 'scale(0.98)' }, { transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 700 });
+      // update UI list
+      appendHistoryUI(text);
+    }
+
+    /************* Storage & history ************/
+    function loadHistory() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      try {
+        return JSON.parse(raw);
+      } catch (e) { return []; }
+    }
+
+    function saveHistoryArray(arr) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function saveSpinResult(text) {
+      const hist = loadHistory();
+      const entry = { result: text, time: new Date().toISOString() };
+      hist.unshift(entry); // newest first
+      // keep only last 100
+      if (hist.length > 100) hist.length = 100;
+      saveHistoryArray(hist);
+      // also auto-download a small JSON (single-entry)
+      downloadJSON(entry, `spin-result-${(new Date()).toISOString().replace(/[:.]/g, '-')}.json`);
+    }
+
+    function appendHistoryUI(text) {
+      const entry = { result: text, time: new Date().toLocaleString() };
+      const div = document.createElement('div');
+      div.className = 'hist-item';
+      div.innerHTML = `<div>${entry.result}</div><div style="opacity:.8;font-size:.9rem">${entry.time}</div>`;
+      historyList.prepend(div);
+    }
+
+    // render existing history on load
+    (function renderExistingHistory() {
+      const hist = loadHistory();
+      hist.forEach(h => {
+        const div = document.createElement('div');
+        div.className = 'hist-item';
+        const time = new Date(h.time).toLocaleString();
+        div.innerHTML = `<div>${h.result}</div><div style="opacity:.8;font-size:.9rem">${time}</div>`;
+        historyList.appendChild(div);
+      });
+    })();
+
+    /************* Download JSON helper ************/
+    function downloadJSON(obj, filename = 'spin-result.json') {
+      try {
+        const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      } catch (e) {
+        console.error('Download failed', e);
+      }
+    }
+
+    // Export all history as file when button clicked
+    // downloadAllBtn.addEventListener('click', () => {
+    //   const all = loadHistory();
+    //   if (all.length === 0) {
+    //     alert('Belum ada history spin.');
+    //     return;
+    //   }
+    //   downloadJSON({ exportedAt: new Date().toISOString(), history: all }, `spin-history-11oct-2025.json`);
+    // });
+
+    /************* Controls binding ************/
+    spinBtn.addEventListener('click', () => {
+      // user gesture for audio allowed here
+      // bgMusic.pause(); // ensure start from scratch
+      spinWheel();
+    });
+
+    playMusicBtn.addEventListener('click', () => {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(() => { });
+        playMusicBtn.textContent = '⏸️ Jeda Musik';
+      } else {
+        bgMusic.pause();
+        playMusicBtn.textContent = '⏯️ Musik';
+      }
+    });
+
+    /************* init ************/
+    // pointer styling: rotate pointer color pulse
+    setInterval(() => {
+      document.querySelector('.pointer').animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-3px)' }, { transform: 'translateY(0)' }], { duration: 1200 });
+    }, 1400);
+
+    // when page loads, ensure wheel is in a random base rotation (for variety)
+    window.addEventListener('load', () => {
+      const base = Math.random() * 360;
+      wheelSvg.style.transform = `rotate(${base}deg)`;
+    });
+
+    // clicking slide (mobile) to advance is not necessary here, but ensure wheel redraw on resize
+    window.addEventListener('resize', () => buildWheel());
+
+  </script>
+</body>
+
+</html>
