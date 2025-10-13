@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taman Kenangan 🌿💜</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to top, #4b6b50, #b89dc9);
+      color: #fff;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* Tombol awal */
+    .start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, #5c8a64, #bfa8d8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+      transition: opacity 1s ease;
+    }
+
+    .start-screen button {
+      background-color: #9b6dff;
+      color: white;
+      font-size: 1.2em;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: 0.3s;
+    }
+
+    .start-screen button:hover {
+      background-color: #b48dff;
+      transform: scale(1.05);
+    }
+
+    /* Area taman */
+    .garden {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 2s ease;
+      padding: 80px 20px;
+      z-index: 1;
+    }
+
+    .message {
+      font-size: 1.3em;
+      max-width: 700px;
+      opacity: 0;
+      margin: 15px auto;
+      transition: opacity 1.5s ease;
+    }
+
+    .final-message {
+      font-size: 1.1em;
+      max-width: 800px;
+      margin: 40px auto;
+      opacity: 0;
+      transition: opacity 2s ease;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      line-height: 1.8;
+      text-align: left;
+      white-space: pre-line;
+    }
+
+    /* Kunang-kunang */
+    .firefly {
+      position: fixed;
+      background: rgba(255, 255, 200, 0.8);
+      border-radius: 50%;
+      width: 6px;
+      height: 6px;
+      animation: move 10s infinite ease-in-out;
+      box-shadow: 0 0 8px 4px rgba(255, 255, 180, 0.7);
+      z-index: 0;
+    }
+
+    @keyframes move {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+
+      50% {
+        transform: translateY(-100px) translateX(50px);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Tampilan awal -->
+  <div class="start-screen" id="startScreen">
+    <h2>Selamat datang di Taman Kenangan 🌿💜</h2>
+    <button id="startBtn">Masuk ke Taman</button>
+  </div>
+
+  <!-- Area taman -->
+  <div class="garden" id="garden">
+    <div id="messages"></div>
+    <div class="final-message" id="finalMessage">
+      <p>Sayanggkuu, harii ini aku cuma mau bilang
+        terimakasih banyakk yaa sayanggkuu 💕
+        aku gatauu lagii dan bener benerr aku merasaaa "apalagi yang bisa aku katakan untukk kamuu"
+        terlalu banyakk perhatian yang kamuu berikan kepada kuu sayangg..
+        adanyaa kamuu dihidupkuu sekarangg,
+        sepenuhnyaa memberikan warna baruu dalam hidupkuu
+        warnaa yang tak pernah aku bayangkan sebelumnyaa, warna yang tak pernah aku rasakan sebelumnyaa
+        akuu gatauu apakah doa dan harapan akuu bisaa diwujudkan
+        namun 1 hal yang ada dipikiran akuu sekarangg,
+        akuu cumaa mau waktuu yang lebih lamaa untuk bisa bersamamuu sepertii saat inii
+        maaf kalauu selamaa ini akuu masih jauh dari apa yang kamu bayangkann...
+        tapiii janjii akuuu ke kamuu, akuu akan terus berusaha untuk menjadi yang terbaik di hidup kamu sayanggkuu
+        maaff yaa kaloo agak ga nyambungg akuu cumaa ketikk apa yang ada di pikiran akuu sayangg hehehehe
+        terakhirr, special love from me to you baby 💜
+      </p>
+    </div>
+  </div>
+
+  <!-- Musik -->
+  <audio id="bgMusic" src="Berdua Bersama - Jaz (Lirik).mp3" loop></audio>
+
+  <script>
+    const startBtn = document.getElementById("startBtn");
+    const startScreen = document.getElementById("startScreen");
+    const garden = document.getElementById("garden");
+    const messagesContainer = document.getElementById("messages");
+    const finalMessage = document.getElementById("finalMessage");
+    const music = document.getElementById("bgMusic");
+
+    const texts = [
+      "siang ini langit terlihat begitu cerah, seolah langit sedang bercerita...",
+      "angin berhembus pelan membawa sejuk, mengingatkanku pada sejuknya suara kamu 🍃",
+      "setiap warna di langit siang ini, mengingatkanku pada hangatnya senyum kamu 💜",
+      "dan tanpa sadar, hati ini berbisik pelan...",
+      "ini untuk kamuu sayangggkuu uswaaa☺️..."
+    ];
+
+    startBtn.addEventListener("click", () => {
+      music.play();
+      startScreen.style.opacity = "0";
+      setTimeout(() => startScreen.style.display = "none", 1000);
+      garden.style.opacity = "1";
+
+      // buat kunang-kunang
+      for (let i = 0; i < 20; i++) {
+        const firefly = document.createElement("div");
+        firefly.classList.add("firefly");
+        firefly.style.top = Math.random() * 100 + "%";
+        firefly.style.left = Math.random() * 100 + "%";
+        firefly.style.animationDelay = (Math.random() * 5) + "s";
+        document.body.appendChild(firefly);
+      }
+
+      // tampilkan kalimat satu per satu
+      let delay = 0;
+      texts.forEach((text) => {
+        const msg = document.createElement("div");
+        msg.classList.add("message");
+        msg.textContent = text;
+        messagesContainer.appendChild(msg);
+        setTimeout(() => msg.style.opacity = "1", delay);
+        delay += 4000;
+      });
+
+      // setelah semua kalimat muncul, munculkan pesan akhir
+      setTimeout(() => {
+        finalMessage.style.opacity = "1";
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }, delay + 2000);
+    });
+  </script>
+
+</body>
+
+</html>
