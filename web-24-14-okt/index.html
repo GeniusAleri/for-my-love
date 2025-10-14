@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>🎁 Surprise — 14 Okt 2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink1: #ffd6ea;
+      --pink2: #ffb3dd;
+      --purple: #b771e6;
+      --accent: #ff7ab6;
+      --card: #ffffffcc;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(180deg, var(--pink1), #f7e6ff 50%, #fff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #4b2b58;
+    }
+
+    .stage {
+      width: 100%;
+      max-width: 520px;
+      text-align: center;
+      position: relative;
+      padding: 28px;
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: 0 18px 40px rgba(183, 102, 214, 0.18);
+    }
+
+    h1 {
+      margin: 6px 0 8px;
+      font-size: 22px;
+      color: var(--purple);
+      letter-spacing: 0.3px;
+    }
+
+    p.lead {
+      margin: 0 0 18px;
+      font-size: 15px;
+      color: #6c3e73;
+    }
+
+    /* gift */
+    .gift-wrap {
+      width: 170px;
+      height: 170px;
+      margin: 6px auto 18px;
+      position: relative;
+      perspective: 900px;
+      cursor: pointer;
+    }
+
+    .box {
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fff 0%, #ffeaf6 100%);
+      box-shadow: 0 12px 30px rgba(199, 108, 198, 0.18);
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 700ms cubic-bezier(.2, .9, .2, 1);
+    }
+
+    .lid {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -16px;
+      height: 60px;
+      background: linear-gradient(180deg, #ffb6db, #ff8fc8);
+      border-radius: 12px;
+      transform-origin: center bottom;
+      transition: transform 700ms cubic-bezier(.2, .9, .2, 1);
+      box-shadow: 0 8px 18px rgba(255, 122, 172, 0.25);
+    }
+
+    .ribbon-vert {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 10px;
+      width: 26px;
+      height: 150px;
+      background: linear-gradient(180deg, #ff7ab6, #c084fc);
+      border-radius: 8px;
+      z-index: 3;
+      box-shadow: 0 8px 18px rgba(192, 132, 252, 0.2);
+    }
+
+    .bow {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 44px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bow span {
+      display: block;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(90deg, #ffe1f3, #ffd4f0);
+      border-radius: 50%;
+      margin: 0 4px;
+      box-shadow: 0 6px 12px rgba(255, 140, 187, 0.25);
+    }
+
+    /* opened */
+    .opened .lid {
+      transform: rotateX(-75deg) translateY(-10px);
+      transition-duration: 900ms;
+    }
+
+    .opened .box {
+      transform: translateY(10px);
+    }
+
+    /* message card */
+    .message {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fff, #fff7ff);
+      box-shadow: 0 8px 20px rgba(199, 108, 198, 0.06);
+      opacity: 0;
+      transform: translateY(8px) scale(.98);
+      transition: opacity 420ms ease, transform 420ms ease;
+    }
+
+    .opened .message {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .message h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #8a3fae
+    }
+
+    .message p {
+      margin: 8px 0 0;
+      font-size: 14px;
+      color: #6b3b6f;
+      line-height: 1.45
+    }
+
+    /* link button */
+    .btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(199, 108, 198, 0.2);
+      transition: transform .18s ease;
+    }
+
+    .btn:active {
+      transform: translateY(2px)
+    }
+
+    .small {
+      font-size: 13px;
+      color: #7a467f;
+      margin-top: 10px;
+      display: block;
+    }
+
+    /* confetti pieces */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 16px;
+      background: var(--accent);
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      transform-origin: center;
+      border-radius: 3px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    /* music control */
+    .controls {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .music-btn {
+      background: white;
+      border: 0;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: 0 6px 14px rgba(183, 102, 214, 0.12);
+      cursor: pointer;
+      color: var(--purple)
+    }
+
+    /* responsive */
+    @media (max-width:420px) {
+      .gift-wrap {
+        width: 150px;
+        height: 150px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage" id="stage">
+    <div class="controls">
+      <button class="music-btn" id="musicToggle">🎵 Play</button>
+    </div>
+
+    <h1>14 Okt 2025 — Surprise 💝</h1>
+    <p class="lead">Klik kotak kado ini ya, aku ada kejutan manis buat kamu 🥰</p>
+
+    <div class="gift-wrap" id="gift">
+      <div class="box" aria-hidden="true">
+        <div class="lid" role="presentation"></div>
+        <div class="ribbon-vert" aria-hidden="true"></div>
+        <div class="bow" aria-hidden="true">
+          <span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="message" id="message" aria-hidden="true">
+      <h2>Surprise! 💕</h2>
+      <p>Hai sayang, selamat 14 Oktober — hari ini aku ada sedikit kabar bahagiaa buat kamuu, akuu udah gajiaann wkwkwk,
+        yaa semogaa minggu besok kita bisaa jadi ketemuu yaa babyyy, see u soon sayanggkuuu 💕💕💕</p>
+    </div>
+  </div>
+
+  <!-- audio -->
+  <audio id="bg" loop>
+    <source src="ran-dekat-di-hati-official-music-video_HjVcKbL2.mp3" type="audio/mp3">
+  </audio>
+  <audio id="taDa" src="assets/sfx/tada.mp3" preload="auto"></audio>
+
+  <script>
+    // Elements
+    const gift = document.getElementById('gift');
+    const stage = document.getElementById('stage');
+    const musicToggle = document.getElementById('musicToggle');
+    const bg = document.getElementById('bg');
+    const taDa = document.getElementById('taDa');
+
+    // open state
+    let opened = false;
+    gift.addEventListener('click', () => {
+      if (opened) return;
+      if (bg.paused) {
+        bg.play().catch(() => { });
+        musicToggle.textContent = '⏸ Pause';
+      } else {
+        bg.pause();
+        musicToggle.textContent = '🎵 Play';
+      }
+      opened = true;
+      stage.classList.add('opened');
+      // play tada
+      try { taDa.currentTime = 0; taDa.play(); } catch (e) { }
+      // start confetti
+      burstConfetti(28);
+    });
+
+    // music button
+    musicToggle.addEventListener('click', () => {
+      if (bg.paused) {
+        bg.play().catch(() => { });
+        musicToggle.textContent = '⏸ Pause';
+      } else {
+        bg.pause();
+        musicToggle.textContent = '🎵 Play';
+      }
+    });
+
+    // Confetti generator (simple)
+    function burstConfetti(amount) {
+      for (let i = 0; i < amount; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        document.body.appendChild(c);
+        // random color
+        const colors = ['#ff7ab6', '#ffd166', '#c084fc', '#ffb0d6', '#8be9ff'];
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        // random start around center of gift
+        const rect = gift.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2 + (Math.random() * 60 - 30);
+        const startY = rect.top + rect.height / 2 + (Math.random() * 40 - 20);
+        c.style.left = startX + 'px';
+        c.style.top = startY + 'px';
+        c.style.opacity = '1';
+        // animate using js (simple)
+        const angle = (Math.random() * 360) * (Math.PI / 180);
+        const velocity = 200 + Math.random() * 260;
+        const dx = Math.cos(angle) * velocity;
+        const dy = -Math.abs(Math.sin(angle)) * (120 + Math.random() * 240);
+        const rotate = Math.random() * 720;
+        c.animate([
+          { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+          { transform: `translate(${dx}px, ${dy}px) rotate(${rotate}deg)`, opacity: 0 }
+        ], {
+          duration: 1200 + Math.random() * 800,
+          easing: 'cubic-bezier(.2,.7,.2,1)'
+        });
+        // remove
+        setTimeout(() => c.remove(), 2000 + Math.random() * 800);
+      }
+    }
+
+    // small accessibility: open message if keyboard activated (Enter)
+    gift.setAttribute('tabindex', '0');
+    gift.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') gift.click();
+    });
+
+    // auto small hint: if user doesn't open within 5s, nudge
+    setTimeout(() => {
+      if (!opened) {
+        gift.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 900, iterations: 2 });
+      }
+    }, 5000);
+  </script>
+</body>
+
+</html>
