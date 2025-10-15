@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Langit Malam Kita</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(ellipse at bottom, #1b0034 0%, #090a0f 100%);
+      color: white;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Opening Section */
+    .opening {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: radial-gradient(circle at center, #2c0066, #090a0f);
+      flex-direction: column;
+      transition: opacity 1s ease;
+      text-align: center;
+    }
+
+    .open-btn {
+      background: linear-gradient(135deg, #4b0082, #6a0dad);
+      border: none;
+      color: white;
+      padding: 15px 35px;
+      font-size: 1.2em;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      transition: 0.3s;
+    }
+
+    .open-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Scene Section */
+    .scene {
+      position: relative;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      scroll-behavior: smooth;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .moon {
+      position: fixed;
+      top: 10%;
+      right: 15%;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #e9be8d 40%, #e9dacc 100%);
+      border-radius: 50%;
+      opacity: 0;
+      animation: moonrise 5s ease forwards 2s;
+      box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes moonrise {
+      to {
+        opacity: 1;
+        transform: translateY(-10px);
+      }
+    }
+
+    .text-container {
+      position: relative;
+      z-index: 2;
+      width: 85%;
+      max-width: 700px;
+      font-size: 1.2em;
+      line-height: 1.8em;
+      color: #e0d4ff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+      margin: 120px auto 150px;
+      padding-bottom: 100px;
+    }
+
+    audio {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      outline: none;
+      z-index: 5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="opening" id="opening">
+    <h2>🌌 Malam ini, langit menyimpan sesuatu untukmu...</h2>
+    <button class="open-btn" onclick="startScene()">Buka Langit Malam Kita ☾</button>
+  </div>
+
+  <div class="scene" id="scene">
+    <canvas id="stars"></canvas>
+    <div class="moon"></div>
+    <div class="text" id="text"></div>
+    <audio autoplay loop>
+      <source src="Official lyrics video lagu Sampaikan Sayangku Untuk Dia - Iqbaal Ramadhan & Caitlin Halderman.mp3"
+        type="audio/mpeg">
+    </audio>
+  </div>
+
+  <script>
+    // Efek bintang
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        alpha: Math.random(),
+        delta: Math.random() * 0.02,
+      });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let star of stars) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255," + star.alpha + ")";
+        ctx.fill();
+        star.alpha += star.delta;
+        if (star.alpha <= 0 || star.alpha >= 1) star.delta = -star.delta;
+      }
+      // Bintang jatuh
+      if (Math.random() < 0.005) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height / 2;
+        for (let i = 0; i < 30; i++) {
+          ctx.beginPath();
+          ctx.arc(x - i * 2, y + i, 1, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(255,255,255," + (1 - i / 30) + ")";
+          ctx.fill();
+        }
+      }
+      requestAnimationFrame(drawStars);
+    }
+    drawStars();
+
+    // Efek typing
+    const texts = [
+      "Haii babyyy 👋👋",
+      "Udah malem aja nii yaa kwkww Kamuu ngiraa akuu lupaa gaa nii 🌙",
+      "Akuu ga mungkin lupaa dongg sayangg, cumaa maaf bangett hari ini emang lumayan padett bangett, jadii ga sempet bikin dehh pagii tadii maaff yaa 🙏",
+      "btw, congrattss yaa sayangg kamu dapet panggilan interview lagii, akuu disini cuma bisa support dan doain kamuu supayaa kamu selalu diberikan yang terbaik yaa cintaa .....",
+      "Doain aku biar cepet nyusul yaa sayangg wkwkw",
+      "naahh tadii kamu nanyaa kan aku sayanggg ga sama kamuu?? biar laguu ini yang jawab wkw, love u sayanggkuu uswaa☺️..."
+    ];
+
+    let index = 0;
+    let charIndex = 0;
+    const textElement = document.getElementById("text");
+
+    function typeText() {
+      if (index < texts.length) {
+        if (charIndex < texts[index].length) {
+          textElement.innerHTML += texts[index].charAt(charIndex);
+          charIndex++;
+          setTimeout(typeText, 60);
+        } else {
+          textElement.innerHTML += "<br><br>";
+          index++;
+          charIndex = 0;
+          setTimeout(typeText, 800);
+        }
+      }
+    }
+
+    // Fungsi tombol pembuka
+    function startScene() {
+      document.getElementById("opening").style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById("opening").style.display = "none";
+        const scene = document.getElementById("scene");
+        scene.style.display = "flex";
+        document.body.style.overflow = "auto";
+        typeText();
+      }, 1000);
+    }
+  </script>
+</body>
+
+</html>
