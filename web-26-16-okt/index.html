@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rainbow After Rain 🌈</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to bottom, #1e2a78, #2d1258);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #opening {
+      text-align: center;
+      z-index: 10;
+      /* tambahkan ini */
+      position: relative;
+      /* supaya z-index berfungsi */
+    }
+
+
+
+    button {
+      padding: 12px 28px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      background-color: #a46de0;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #c48ef7;
+      transform: scale(1.05);
+    }
+
+    /* Hujan */
+    /* dan pastikan di bagian hujan seperti ini */
+    .rain {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      /* ini penting biar gak nutup tombol */
+      overflow: hidden;
+      z-index: 2;
+    }
+
+
+    .drop {
+      position: absolute;
+      bottom: 100%;
+      width: 2px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+      }
+    }
+
+    /* Langit setelah hujan */
+    .sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #6ea8ff, #e1c0ff);
+      opacity: 0;
+      transition: opacity 5s ease-in-out;
+      z-index: 1;
+    }
+
+    /* Pelangi */
+    /* .rainbow {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 250px;
+      border-radius: 50%;
+      background: conic-gradient(red,
+          orange,
+          yellow,
+          green,
+          blue,
+          indigo,
+          violet,
+          transparent 80%);
+      filter: blur(8px);
+      opacity: 0;
+      transition: opacity 4s ease-in-out;
+      z-index: 3;
+    } */
+
+    /* Konten teks */
+    #content {
+      display: none;
+      position: relative;
+      z-index: 4;
+      max-width: 600px;
+      height: 80vh;
+      overflow-y: auto;
+      /* background-color: rgba(255, 255, 255, 0.1); */
+      border-radius: 15px;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+      line-height: 1.6;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="opening">
+    <h2>Setelah hujan... pasti ada pelangi 🌧️🌈</h2>
+    <button onclick="startScene()">Mulai</button>
+  </div>
+
+  <div class="rain" id="rain"></div>
+  <div class="sky" id="sky"></div>
+  <div class="rainbow" id="rainbow"></div>
+
+  <div id="content">
+    <p id="text"></p>
+  </div>
+
+  <audio id="bgMusic"
+    src="Official lyrics video lagu Sampaikan Sayangku Untuk Dia - Iqbaal Ramadhan & Caitlin Halderman.mp3"></audio>
+
+  <script>
+    const texts = [
+      "Malam babyyy...",
+      "Heheheh kamuu harii ini ngecek ngecek linkk lagii gaaaa??...",
+      "akuu sengajaaa ini bikin link nyaa malemm wkkw biar kamuu nyariin duluuu, tapii gatauu nii kamu nyariin atau ngga",
+      "btw untuk harii inii kamuu jangann patahh semangatt yaa sayangg, apapapun yang terjadii semmogaa yang terbaikk buat kamuu yaa babyyy 💕",
+      "daaann makasiii yaa sayanggkuu, kamuu bela belaain pulangg malem sendiriii ginii, akuu ga tegaa sebenenryaa, cumaa akuu kangenn bangettt samaa kamuuuu huhuhh",
+      "Nantii kamuu bacaa ini dirumaahh yaa sayanggkuu, love u babyy 💜"
+    ];
+
+    let i = 0;
+    const textElement = document.getElementById("text");
+
+    function typeWriter() {
+      if (i < texts.length) {
+        const p = document.createElement("p");
+        p.textContent = "";
+        textElement.appendChild(p);
+        let j = 0;
+        const interval = setInterval(() => {
+          p.textContent += texts[i][j];
+          j++;
+          if (j === texts[i].length) {
+            clearInterval(interval);
+            i++;
+            setTimeout(typeWriter, 1200);
+          }
+        }, 40);
+      }
+    }
+
+    function createRain() {
+      const rain = document.getElementById("rain");
+      for (let i = 0; i < 100; i++) {
+        const drop = document.createElement("div");
+        drop.classList.add("drop");
+        drop.style.left = Math.random() * 100 + "%";
+        drop.style.animationDuration = 0.5 + Math.random() * 0.8 + "s";
+        drop.style.opacity = Math.random();
+        rain.appendChild(drop);
+      }
+    }
+
+    function startScene() {
+      document.getElementById("opening").style.display = "none";
+      document.body.style.overflow = "hidden";
+
+      createRain();
+
+      const music = document.getElementById("bgMusic");
+      music.play();
+
+      setTimeout(() => {
+        document.querySelector(".sky").style.opacity = 1;
+      }, 7000);
+
+      setTimeout(() => {
+        document.querySelector(".rainbow").style.opacity = 1;
+      }, 12000);
+
+      setTimeout(() => {
+        document.getElementById("content").style.display = "block";
+        document.body.style.overflow = "auto";
+        typeWriter();
+      }, 13000);
+    }
+  </script>
+</body>
+
+</html>
