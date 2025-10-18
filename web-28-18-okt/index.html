@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waves of Love 🌊</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      color: #fffaf7;
+      scroll-behavior: smooth;
+    }
+
+    /* Background gradient: pantai sore */
+    body {
+      background: linear-gradient(to top, #1b2a49 0%, #234d6a 50%, #f3b785 100%);
+    }
+
+    /* Ombak animasi */
+    .wave {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 200%;
+      height: 20%;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 1000% 1000% 0 0;
+      animation: wave 10s infinite linear;
+      transform: translate3d(0, 0, 0);
+      z-index: 2;
+    }
+
+    .wave:nth-of-type(2) {
+      bottom: 0;
+      animation: wave 15s infinite linear;
+      opacity: 0.5;
+    }
+
+    @keyframes wave {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* Efek partikel cahaya */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: translateY(-30px);
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: translateY(0);
+        opacity: 0.8;
+      }
+    }
+
+    /* Tombol pembuka */
+    .opening {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #1b2a49, #234d6a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10;
+      color: #fff;
+      transition: opacity 1s ease;
+    }
+
+    .opening h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .opening button {
+      background: #f3b785;
+      color: #1b2a49;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1.1em;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .opening button:hover {
+      transform: scale(1.05);
+      background: #ffe2b5;
+    }
+
+    /* Kontainer teks */
+    .content {
+      display: none;
+      position: relative;
+      z-index: 5;
+      max-width: 700px;
+      margin: 100px auto;
+      padding: 20px;
+      line-height: 1.8;
+      text-align: center;
+      overflow-y: auto;
+      max-height: 80vh;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .typing {
+      display: inline-block;
+      border-right: 3px solid rgba(255, 255, 255, 0.7);
+      white-space: pre-wrap;
+      overflow: hidden;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        border-color: transparent;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Tombol Pembuka -->
+  <div class="opening" id="opening">
+    <h1>🌊 Gelombang Pertemuan 🌅</h1>
+    <button onclick="startExperience()">Buka Ombak</button>
+  </div>
+
+  <!-- Partikel -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Ombak -->
+  <div class="wave"></div>
+  <div class="wave"></div>
+
+  <!-- Konten -->
+  <div class="content" id="content">
+    <p class="typing" id="text"></p>
+  </div>
+
+  <audio id="bgMusic" src="Hivi! - Mata Ke Hati (Lirik Lagu).mp3" preload="auto"></audio>
+
+  <script>
+    const textElement = document.getElementById("text");
+    const fullText = `Ciee yang besok mau ketemuuu wkwkwk
+    masihh sabaarr ga nunggu hari besokk??
+    jangann lupaa jemputt akuu yaa wkwkwkkw, agak ngerepotin sii emangg cumaa yaa gimanaa wkwk
+    btw, jangan lupaa besok apa apa aja yang mau dibawaa biar ga ketinggalan
+    samaa jangan lupaa jugaa bangunin akuu wkwkwkw
+    huaaa gaa sabarnyaa nungguu besokk wkwkwk
+    see u tomorrow babyyy💕👋`;
+
+    let index = 0;
+    function typeWriter() {
+      if (index < fullText.length) {
+        textElement.textContent += fullText.charAt(index);
+        index++;
+        setTimeout(typeWriter, 70);
+      }
+    }
+
+    // Efek partikel cahaya lembut
+    const particlesContainer = document.getElementById("particles");
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement("div");
+      p.classList.add("particle");
+      p.style.left = Math.random() * 100 + "%";
+      p.style.top = Math.random() * 100 + "%";
+      p.style.animationDelay = (Math.random() * 6) + "s";
+      particlesContainer.appendChild(p);
+    }
+
+    // Mulai pengalaman
+    function startExperience() {
+      const opening = document.getElementById("opening");
+      const content = document.getElementById("content");
+      const music = document.getElementById("bgMusic");
+
+      opening.style.opacity = 0;
+      setTimeout(() => {
+        opening.style.display = "none";
+        content.style.display = "block";
+        typeWriter();
+        music.play();
+        document.body.style.overflowY = "auto";
+      }, 1000);
+    }
+  </script>
+
+</body>
+
+</html>
