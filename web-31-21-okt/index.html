@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I Love U So Much Babyy</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff9acb, #ffc3a0);
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #message {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      text-align: center;
+      font-size: 2em;
+      color: white;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .balloon {
+      position: absolute;
+      width: 80px;
+      height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #ff6699);
+      box-shadow: inset -10px -20px 40px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      animation: fall linear forwards;
+    }
+
+    .string {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      width: 2px;
+      height: 50px;
+      background: #999;
+      transform: translateX(-50%);
+    }
+
+    @keyframes fall {
+      0% {
+        top: -150px;
+        transform: scale(1);
+      }
+
+      100% {
+        top: 100vh;
+        transform: scale(0.9);
+        opacity: 0.8;
+      }
+    }
+
+    .pop {
+      animation: pop 0.3s forwards;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    #finalMessage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: bold;
+      color: white;
+      opacity: 0;
+      animation: appear 2s ease forwards;
+      text-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes appear {
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="message">Pecahin balonnyaa yaa sayanggkuu 💕</div>
+  <div id="finalMessage"></div>
+
+  <script>
+    const words = ["I", "love", "u", "so", "much", "babyy"];
+    let popped = 0;
+    let collectedWords = [];
+
+    // fungsi bikin balon jatuh
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.classList.add('balloon');
+      balloon.style.left = Math.random() * 95 + '%';
+      balloon.style.background = getRandomColor();
+      balloon.style.animationDuration = (Math.random() * 0.5 + 0.9) + 's';
+
+      const string = document.createElement('div');
+      string.classList.add('string');
+      balloon.appendChild(string);
+
+      // klik balon = pecah
+      balloon.addEventListener('click', function () {
+        if (!balloon.classList.contains('pop')) {
+          balloon.classList.add('pop');
+          setTimeout(() => balloon.remove(), 300);
+          if (popped < words.length) {
+            showWord(words[popped]);
+          }
+        }
+      });
+
+      document.body.appendChild(balloon);
+
+      // hapus otomatis kalau lewat bawah
+      setTimeout(() => balloon.remove(), 7000);
+    }
+
+    // warna balon random biar lucu
+    function getRandomColor() {
+      const colors = ['#ff6699', '#ff99cc', '#ffccff', '#ffb6c1', '#ff85a2', '#ffa07a'];
+      return `radial-gradient(circle at 30% 30%, #fff, ${colors[Math.floor(Math.random() * colors.length)]})`;
+    }
+
+    // tampilkan kata sesuai urutan
+    function showWord(word) {
+      collectedWords.push(word);
+      popped++;
+      document.getElementById('message').innerHTML = collectedWords.join(' ');
+      if (popped === words.length) {
+        showFinalMessage();
+      }
+    }
+
+    // akhir romantis 💖
+    function showFinalMessage() {
+      document.getElementById('message').style.display = 'none';
+      const final = document.getElementById('finalMessage');
+      final.textContent = "💖 I LOVE U SO MUCH BABYY 💖";
+    }
+
+    // buat balon terus muncul tiap 700ms
+    setInterval(createBalloon, 700);
+  </script>
+
+</body>
+
+</html>
