@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle Cinta 💞</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: "Poppins", sans-serif;
+    }
+
+    h1 {
+      color: #ff1493;
+      margin-bottom: 15px;
+      text-shadow: 0 0 10px #fff;
+    }
+
+    #puzzle {
+      width: 400px;
+      height: 400px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 2px;
+      border: 5px solid #ff69b4;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .piece {
+      background-image: url('3.jpg');
+      /* ganti dengan nama file gambarmu */
+      background-size: 400px 400px;
+      transition: transform 0.2s ease;
+    }
+
+    .piece:hover {
+      transform: scale(1.05);
+    }
+
+    #message {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+      font-size: 26px;
+      color: #ff1493;
+      text-shadow: 0 0 15px #fff;
+      display: none;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 20px;
+      animation: floatUp 4s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-200px) scale(1.5);
+      }
+    }
+
+    .music-btn {
+      margin-top: 20px;
+      background: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-size: 15px;
+      color: #3a1c58;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(170, 120, 220, 0.4);
+      transition: all 0.3s;
+    }
+
+    .music-btn:hover {
+      background: #c084fc;
+      color: white;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>💞 Susun Puzzle Cintaku 💞</h1>
+  <button class="music-btn" onclick="toggleMusic()">🎶 Sambil Denger Lagu Biar Chill</button>
+
+  <div id="puzzle"></div>
+  <div id="message">💖 Kamu berhasil nyatuin semua potongan...<br>Kayak aku yang pengen nyatu lagi sama kamu 💖</div>
+
+  <audio id="romanticMusic" src="Lebih Dari Bintang - LYLA (Lyric Video).mp3"></audio>
+  <!-- Ganti nama lagu sesuai file kamu -->
+
+  <script>
+    const puzzle = document.getElementById("puzzle");
+    const message = document.getElementById("message");
+
+    const music = document.getElementById('romanticMusic');
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    }
+
+    const size = 4; // 4x4
+    let pieces = [];
+    let firstPick = null;
+
+    // Inisialisasi potongan puzzle
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const piece = document.createElement("div");
+        piece.classList.add("piece");
+        piece.style.backgroundPosition = `-${x * 100}px -${y * 100}px`;
+        pieces.push({ element: piece, x, y });
+      }
+    }
+
+    // Acak posisi puzzle
+    pieces.sort(() => Math.random() - 0.5);
+    render();
+
+    function render() {
+      puzzle.innerHTML = "";
+      pieces.forEach(p => puzzle.appendChild(p.element));
+      pieces.forEach((p, i) => p.element.dataset.index = i);
+    }
+
+    // Klik untuk tukar dua potongan
+    puzzle.addEventListener("click", e => {
+      const clicked = e.target;
+      if (!clicked.classList.contains("piece")) return;
+
+      if (!firstPick) {
+        firstPick = clicked;
+        clicked.style.border = "2px solid #ff69b4";
+      } else if (clicked !== firstPick) {
+        let i1 = +firstPick.dataset.index;
+        let i2 = +clicked.dataset.index;
+        [pieces[i1], pieces[i2]] = [pieces[i2], pieces[i1]];
+        firstPick.style.border = "none";
+        firstPick = null;
+        render();
+        checkWin();
+      }
+    });
+
+    // Cek apakah puzzle selesai
+    function checkWin() {
+      let correct = true;
+      for (let i = 0; i < pieces.length; i++) {
+        let correctX = i % size;
+        let correctY = Math.floor(i / size);
+        if (pieces[i].x !== correctX || pieces[i].y !== correctY) {
+          correct = false;
+          break;
+        }
+      }
+      if (correct) {
+        showLove();
+      }
+    }
+
+    // Animasi love + pesan + musik
+    function showLove() {
+      message.style.display = "block";
+
+      // Efek hati beterbangan
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight + "px";
+        heart.style.fontSize = 16 + Math.random() * 20 + "px";
+        document.body.appendChild(heart);
+
+        const duration = 4000 + Math.random() * 2000;
+        heart.style.animationDuration = duration + "ms";
+
+        setTimeout(() => heart.remove(), duration);
+      }
+    }
+  </script>
+</body>
+
+</html>
