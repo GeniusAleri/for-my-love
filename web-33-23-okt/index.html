@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Find My Love 💖</title>
+  <style>
+    :root {
+      --bg1: #fff0f6;
+      --bg2: #fff7f0;
+      --accent: #ff4da6;
+      --muted: #f6c7df;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow: hidden;
+    }
+
+    .wrap {
+      width: min(920px, 96vw);
+      height: min(640px, 86vh);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 250, 250, 0.9));
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      position: relative;
+      padding: 18px;
+      overflow: hidden;
+      border: 3px solid rgba(255, 77, 166, 0.12);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: var(--accent);
+      margin: 0;
+      letter-spacing: 0.2px;
+    }
+
+    p.sub {
+      margin: 0;
+      color: #7a3350;
+      opacity: 0.9;
+      font-size: 13px;
+    }
+
+    /* board area */
+    .board {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 78px;
+      bottom: 18px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2)), linear-gradient(180deg, #ffeef6 0%, #fffefc 100%);
+      box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    /* emoji items (absolute positioned) */
+    .emoji {
+      position: absolute;
+      user-select: none;
+      cursor: pointer;
+      transition: transform 120ms ease, opacity 200ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, opacity;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .emoji.small {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .emoji.mid {
+      font-size: 18px;
+    }
+
+    .emoji.big {
+      font-size: 22px;
+    }
+
+    .emoji.shake {
+      animation: shake 300ms;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0) rotate(0deg);
+      }
+
+      25% {
+        transform: translateX(-6px) rotate(-6deg);
+      }
+
+      50% {
+        transform: translateX(6px) rotate(6deg);
+      }
+
+      75% {
+        transform: translateX(-4px) rotate(-4deg);
+      }
+
+      100% {
+        transform: translateX(0) rotate(0deg);
+      }
+    }
+
+    /* overlay on success */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 250, 250, 0.6));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 400ms ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 20px 26px;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      text-align: center;
+      max-width: 86%;
+      border: 2px solid rgba(255, 77, 166, 0.08);
+    }
+
+    .card h2 {
+      margin: 0 0 6px 0;
+      color: var(--accent);
+      font-size: 22px;
+    }
+
+    .card p {
+      margin: 0;
+      color: #6b3850;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .btn {
+      margin-top: 12px;
+      display: inline-block;
+      background: linear-gradient(90deg, #ff6aa2, #ff2d83);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      cursor: pointer;
+      border: 0;
+      font-weight: 600;
+      box-shadow: 0 8px 18px rgba(255, 45, 131, 0.18);
+    }
+
+    /* floating hearts animation added to body when success */
+    .float-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 18px;
+      animation: floatUp 2200ms cubic-bezier(.2, .9, .3, 1) forwards;
+      transform-origin: center;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.6);
+      }
+
+      10% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-280px) scale(1.4);
+      }
+    }
+
+    /* small footer for instructions */
+    .footer {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      font-size: 13px;
+      color: #7a3350;
+      opacity: 0.9;
+    }
+
+    /* responsive tweaks */
+    @media (max-width:600px) {
+      .wrap {
+        height: 84vh;
+        padding: 12px;
+      }
+
+      h1 {
+        font-size: 18px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap" role="application" aria-label="Find My Love Game">
+    <header>
+      <div>
+        <h1>Find My Love 💖</h1>
+        <p class="sub">Cari satu hati yang tersembunyi. Emoji banyak & kecil — fokus yuk 💘</p>
+      </div>
+    </header>
+
+    <div class="board" id="board" aria-hidden="false"></div>
+
+    <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="card" id="card">
+        <h2>💘 Kamu nemuin hatiku!</h2>
+        <p>Di antara ribuan hal, kamu pilih aku.
+          Terima kasih sudah nemuin hatiku — aku ingin selalu dekat sama kamu 💞</p>
+        <button class="btn" id="replayBtn">Main lagi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- music file (ganti nama lagu kalau perlu) -->
+  <audio id="music" src="TULUS - Labirin (Official Lyric Video).mp3" preload="auto"></audio>
+
+  <script>
+    (function () {
+      const board = document.getElementById('board');
+      const overlay = document.getElementById('overlay');
+      const replayBtn = document.getElementById('replayBtn');
+      const music = document.getElementById('music');
+
+      // Emojis pool (exclude the target heart)
+      const pool = ["🌸", "🌼", "🌟", "🍀", "🍓", "🍒", "🌻", "🍃", "💎", "✨", "🍭", "🌈", "🍪", "🧸", "🎀", "☁️", "⭐", "🍩", "🍉", "🍋", "🍊", "🥐", "🍥", "🌺", "🍁", "🎈", "🍬", "🌿"];
+      const targetEmoji = "💖";
+
+      // config
+      const COUNT = 120; // jumlah emoji (banyak & kecil)
+      const minSize = 15; // px font-size
+      const maxSize = 25;
+
+      let width, height;
+
+      function setBoardSize() {
+        const rect = board.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+      }
+
+      // create random positioned emoji elements
+      function populate() {
+        board.innerHTML = "";
+        setBoardSize();
+
+        // place many distractors
+        for (let i = 0; i < COUNT; i++) {
+          const el = document.createElement('div');
+          el.className = 'emoji small';
+          // random emoji from pool
+          const e = pool[Math.floor(Math.random() * pool.length)];
+          el.textContent = e;
+          styleRandom(el);
+          el.dataset.isTarget = "false";
+          attachWrongClick(el);
+          board.appendChild(el);
+        }
+
+        // place the target heart in a random position on top (to ensure it's present)
+        const heart = document.createElement('div');
+        heart.className = 'emoji small';
+        heart.textContent = targetEmoji;
+        heart.dataset.isTarget = "true";
+        styleRandom(heart);
+        // make sure it's clickable and on top
+        heart.style.zIndex = 999;
+        attachTargetClick(heart);
+        board.appendChild(heart);
+
+        // shuffle stacking order so heart is not always last in DOM (but we keep zIndex)
+        // add some rotation / slight movement to distractors
+        Array.from(board.children).forEach((c, i) => {
+          c.style.transform += ` rotate(${(Math.random() - 0.5) * 10}deg)`;
+        });
+      }
+
+      function styleRandom(el) {
+        // random position inside board, with small padding
+        const pad = 6;
+        const x = Math.random() * (width - pad * 6) + pad;
+        const y = Math.random() * (height - pad * 6) + pad;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        // random size
+        const size = Math.floor(Math.random() * (maxSize - minSize)) + minSize;
+        el.style.fontSize = size + 'px';
+        // random opacity slightly varied
+        el.style.opacity = (0.78 + Math.random() * 0.22).toFixed(2);
+      }
+
+      function attachWrongClick(el) {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          // small shake feedback
+          el.classList.remove('shake');
+          // force reflow to restart animation
+          void el.offsetWidth;
+          el.classList.add('shake');
+        });
+      }
+
+      function attachTargetClick(el) {
+        el.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          // prevent multiple triggers
+          if (overlay.classList.contains('show')) return;
+          // play music (user clicked so browser allows)
+          try { await music.play(); } catch (err) { /* ignore */ }
+
+          showSuccessAnimation(e.pageX, e.pageY);
+          // show overlay message
+          overlay.classList.add('show');
+          overlay.setAttribute('aria-hidden', 'false');
+
+          // optional: dim other items
+          Array.from(board.children).forEach(c => {
+            if (c !== el) c.style.opacity = 0.08;
+          });
+        }, { once: true });
+      }
+
+      // floating hearts generator
+      function showSuccessAnimation(x, y) {
+        // create multiple floating hearts from bottom random positions
+        const count = 28;
+        for (let i = 0; i < count; i++) {
+          const fh = document.createElement('div');
+          fh.className = 'float-heart';
+          fh.textContent = ['💖', '💗', '💕', '💞'][Math.floor(Math.random() * 4)];
+          // random start: near click point but within viewport
+          const startX = (x || (window.innerWidth / 2)) + (Math.random() - 0.5) * 120;
+          const startY = (y || (window.innerHeight / 2)) + (Math.random() - 0.5) * 40;
+          fh.style.left = Math.max(8, Math.min(window.innerWidth - 40, startX)) + 'px';
+          fh.style.top = startY + 'px';
+          fh.style.opacity = Math.random() * 0.9 + 0.1;
+          fh.style.fontSize = (12 + Math.random() * 20) + 'px';
+          fh.style.zIndex = 2200 + i;
+          document.body.appendChild(fh);
+          // remove after animation
+          setTimeout(() => fh.remove(), 2400 + Math.random() * 900);
+        }
+
+        // subtle burst scale on board
+        board.animate([
+          { transform: 'scale(1)', filter: 'brightness(1)' },
+          { transform: 'scale(1.03)', filter: 'brightness(1.08)' },
+          { transform: 'scale(1)', filter: 'brightness(1)' }
+        ], { duration: 700, easing: 'cubic-bezier(.2,.9,.3,1)' });
+      }
+
+      replayBtn.addEventListener('click', () => {
+        // stop music, reset
+        overlay.classList.remove('show');
+        overlay.setAttribute('aria-hidden', 'true');
+        populate();
+      });
+
+      // initial populate and handle resize
+      populate();
+      window.addEventListener('resize', () => {
+        // re-populate to reposition everything nicely
+        populate();
+      });
+
+      // accessibility: allow keyboard Enter to click nearest? (simple: focus board and listen space)
+      board.tabIndex = 0;
+      board.addEventListener('keydown', (e) => {
+        if (e.code === 'KeyR') { // press R to reshuffle
+          populate();
+        }
+      });
+
+      // small hint for first-time users: clicking any emoji will make the page interactive for audio
+      board.addEventListener('click', function onFirst() {
+        // remove this handler after first click
+        board.removeEventListener('click', onFirst);
+        // nothing else needed because target click will play music
+      });
+    })();
+  </script>
+</body>
+
+</html>
