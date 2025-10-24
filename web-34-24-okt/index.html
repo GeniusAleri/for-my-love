@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Lockscreen Cinta 💜</title>
+  <style>
+    :root {
+      --bg1: #3b0f5f;
+      --bg2: #7b3fb0;
+      --accent: #d89be6;
+      --glass: rgba(255, 255, 255, 0.06);
+      --card: rgba(255, 255, 255, 0.06);
+      --text: #fffafc;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding-top: 10px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255, 255, 255, 0.03), transparent),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding: 20px;
+      /* min-height: 100vh; */
+    }
+
+    /* phone frame */
+    .phone {
+      width: 380px;
+      max-width: 80vw;
+      aspect-ratio: 9/14;
+      /* tall phone */
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), inset 0 2px 8px rgba(255, 255, 255, 0.02);
+      overflow: hidden;
+      position: relative;
+      border: 2px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* status bar */
+    .status {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      font-size: 13px;
+      opacity: 0.95;
+    }
+
+    .time {
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.6px;
+    }
+
+    .icons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 14px;
+      opacity: 0.95
+    }
+
+    /* screen area */
+    .screen {
+      position: absolute;
+      inset: 44px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 18px;
+    }
+
+    .lock-title {
+      margin-top: 6px;
+      text-align: center;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .subtitle {
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      opacity: 0.95;
+    }
+
+    /* PIN circles */
+    .pin-wrap {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
+      border-radius: 14px;
+      width: 92%;
+      max-width: 320px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    }
+
+    .pin-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      background: transparent;
+      transition: background 220ms, transform 160ms;
+    }
+
+    .pin-dot.filled {
+      background: var(--accent);
+      transform: scale(1.06);
+      border-color: rgba(255, 255, 255, 0.55)
+    }
+
+    /* keypad */
+    .keypad {
+      margin-top: 22px;
+      width: 100%;
+      max-width: 360px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      justify-items: center;
+      align-items: center;
+      padding: 6px 6px 18px 6px;
+    }
+
+    .key {
+      width: 72px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02));
+      font-size: 20px;
+      color: var(--text);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 140ms ease, box-shadow 140ms;
+    }
+
+    .key:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14)
+    }
+
+    .key.fn {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9)
+    }
+
+    .hint {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-top: 10px;
+      color: rgba(255, 255, 255, 0.9)
+    }
+
+    /* shake animation for wrong PIN */
+    .shake {
+      animation: shakeX 420ms;
+    }
+
+    @keyframes shakeX {
+      0% {
+        transform: translateX(0)
+      }
+
+      16% {
+        transform: translateX(-8px)
+      }
+
+      33% {
+        transform: translateX(8px)
+      }
+
+      50% {
+        transform: translateX(-6px)
+      }
+
+      66% {
+        transform: translateX(6px)
+      }
+
+      83% {
+        transform: translateX(-3px)
+      }
+
+      100% {
+        transform: translateX(0)
+      }
+    }
+
+    /* swipe overlay */
+    .swipe-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .swipe-card {
+      width: 80%;
+      max-width: 320px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02));
+      padding: 12px 14px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.95);
+      transform: translateY(4px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+      pointer-events: auto;
+    }
+
+    .swipe-hint {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .swipe-bar {
+      width: 60px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      margin: 0 auto;
+    }
+
+    /* unlocked overlay (final message) */
+    .unlocked {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(122, 56, 120, 0.9), rgba(70, 20, 80, 0.98));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+      gap: 12px;
+      text-align: center;
+      transform: translateY(100%);
+      transition: transform 500ms cubic-bezier(.2, .9, .25, 1);
+      z-index: 50;
+    }
+
+    .unlocked.show {
+      transform: translateY(0)
+    }
+
+    .unlocked h2 {
+      color: #fff;
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .unlocked p {
+      color: rgba(255, 255, 255, 0.95);
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5
+    }
+
+    .close-btn {
+      margin-top: 10px;
+      background: linear-gradient(90deg, #ffc1f6, #ff8adb);
+      color: #3b0035;
+      border: 0;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(120, 40, 120, 0.18);
+    }
+
+    /* floating hearts */
+    .float-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 18px;
+      animation: floatUp 2200ms cubic-bezier(.2, .9, .3, 1) forwards;
+      transform-origin: center;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.6);
+      }
+
+      10% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-260px) scale(1.4);
+      }
+    }
+
+    /* small screen tweaks */
+    @media (max-width:420px) {
+      .key {
+        width: 60px;
+        height: 54px
+      }
+
+      .pin-dot {
+        width: 12px;
+        height: 12px
+      }
+
+      .phone {
+        border-radius: 20px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone" id="phone" role="application" aria-label="Lockscreen Cinta">
+    <div class="status">
+      <div class="left">
+        <span id="dateTime" class="time">12:45</span>
+      </div>
+      <div class="icons">🔋 86%</div>
+    </div>
+
+    <div class="screen" id="screen">
+      <div class="lock-title">Masukkan PIN untuk buka hatiku 💜</div>
+      <div class="subtitle">Silakan masukkan 8 digit PIN</div>
+
+      <div class="pin-wrap" id="pinWrap" aria-hidden="false" style="margin-top:14px;">
+        <!-- 8 dots -->
+        <div class="pin-dot" id="d0"></div>
+        <div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div>
+        <div class="pin-dot" id="d3"></div>
+        <div class="pin-dot" id="d4"></div>
+        <div class="pin-dot" id="d5"></div>
+        <div class="pin-dot" id="d6"></div>
+        <div class="pin-dot" id="d7"></div>
+      </div>
+
+      <div class="keypad" id="keypad" aria-hidden="false">
+        <!-- numbers -->
+        <div class="key">1</div>
+        <div class="key">2</div>
+        <div class="key">3</div>
+        <div class="key">4</div>
+        <div class="key">5</div>
+        <div class="key">6</div>
+        <div class="key">7</div>
+        <div class="key">8</div>
+        <div class="key">9</div>
+        <div class="key fn" id="clear">Clear</div>
+        <div class="key">0</div>
+        <div class="key fn" id="del">Del</div>
+      </div>
+
+      <div class="hint" id="hint">PIN contoh: 17280325</div>
+    </div>
+
+    <!-- swipe area hidden until PIN correct -->
+    <div class="swipe-overlay" id="swipeWrap" style="display:none;">
+      <div class="swipe-card" id="swipeCard" aria-hidden="true">
+        <div class="swipe-hint">Geser ke atas untuk membuka</div>
+        <div class="swipe-bar" id="swipeBar"></div>
+      </div>
+    </div>
+
+    <!-- final unlocked screen -->
+    <div class="unlocked" id="unlocked" aria-hidden="true">
+      <h2>💞 Hatiku untukmu</h2>
+      <p>Kamu sudah membuka pintu kecil ini.
+        Terima kasih sayangg mau meluangkan waktu untuk membukaa hatiku — aku sayang kamu, kamuu jangan sedih yaa sayangg
+        baksonyaa gaada, jangann sedih lagii yaa babyykuu, Love u sayanggkuuuu 💜</p>
+      <button class="close-btn" id="closeBtn">Tutup & main lagi</button>
+    </div>
+  </div>
+
+  <!-- music file (taruh lagu.mp3 di folder yang sama) -->
+  <audio id="music" src="TULUS - Labirin (Official Lyric Video).mp3" preload="auto"></audio>
+
+  <script>
+    (() => {
+      const CORRECT_PIN = "17280325";
+      let input = "";
+      const dots = Array.from({ length: 8 }, (_, i) => document.getElementById('d' + i));
+      const keypad = document.getElementById('keypad');
+      const pinWrap = document.getElementById('pinWrap');
+      const hint = document.getElementById('hint');
+      const swipeWrap = document.getElementById('swipeWrap');
+      const swipeCard = document.getElementById('swipeCard');
+      const unlocked = document.getElementById('unlocked');
+      const closeBtn = document.getElementById('closeBtn');
+      const music = document.getElementById('music');
+      const phone = document.getElementById('phone');
+      const screen = document.getElementById('screen');
+
+      // update time display
+      function updateTime() {
+        const el = document.getElementById('dateTime');
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        el.textContent = `${hh}:${mm}`;
+      }
+      updateTime();
+      setInterval(updateTime, 60 * 1000);
+
+      // keypad clicks
+      keypad.addEventListener('click', (e) => {
+        const key = e.target.closest('.key');
+        if (!key) return;
+        const v = key.textContent.trim();
+        if (key.id === 'clear') {
+          input = "";
+          refreshDots();
+          return;
+        }
+        if (key.id === 'del') {
+          input = input.slice(0, -1);
+          refreshDots();
+          return;
+        }
+        if (/\d/.test(v) && input.length < 8) {
+          input += v;
+          refreshDots();
+          if (input.length === 8) {
+            checkPin();
+          }
+        }
+      });
+
+      function refreshDots() {
+        for (let i = 0; i < 8; i++) {
+          if (i < input.length) dots[i].classList.add('filled');
+          else dots[i].classList.remove('filled');
+        }
+      }
+
+      function wrongPinFeedback() {
+        pinWrap.classList.remove('shake');
+        // reflow to restart
+        void pinWrap.offsetWidth;
+        pinWrap.classList.add('shake');
+        hint.textContent = "PIN salah, coba lagi sayang 😘";
+        setTimeout(() => { hint.textContent = "PIN contoh: 17280325"; }, 1600);
+        input = "";
+        refreshDots();
+      }
+
+      function checkPin() {
+        if (input === CORRECT_PIN) {
+          // correct: show swipe area
+          pinWrap.style.display = 'none';
+          keypad.style.display = 'none';
+          hint.style.display = 'none';
+          swipeWrap.style.display = 'block';
+          swipeCard.setAttribute('aria-hidden', 'false');
+          enableSwipe();
+        } else {
+          wrongPinFeedback();
+        }
+      }
+
+      // swipe detection (touch + mouse)
+      function enableSwipe() {
+        let startY = null;
+        let touching = false;
+        const threshold = 90; // px to consider swipe up
+        const swipeArea = swipeCard;
+
+        function start(e) {
+          touching = true;
+          startY = (e.touches ? e.touches[0].clientY : e.clientY);
+          swipeArea.style.transition = 'none';
+        }
+        function move(e) {
+          if (!touching) return;
+          const y = (e.touches ? e.touches[0].clientY : e.clientY);
+          const dy = startY - y; // positive when swiping up
+          // clamp translate
+          const t = Math.max(0, Math.min(dy, 200));
+          swipeArea.style.transform = `translateY(${-t}px)`;
+          // visual: increase brightness slightly
+          const p = Math.min(1, t / 200);
+          phone.style.filter = `brightness(${1 + p * 0.06})`;
+        }
+        function end(e) {
+          if (!touching) return;
+          touching = false;
+          const endY = (e.changedTouches ? e.changedTouches[0].clientY : e.clientY);
+          const dy = startY - endY;
+          swipeArea.style.transition = 'transform 280ms cubic-bezier(.2,.9,.25,1)';
+          swipeArea.style.transform = 'translateY(0)';
+          phone.style.filter = '';
+          if (dy > threshold) {
+            // unlocked
+            unlock();
+          } else {
+            // small shake
+            swipeArea.classList.remove('shake');
+            void swipeArea.offsetWidth;
+            swipeArea.classList.add('shake');
+          }
+          startY = null;
+        }
+
+        // attach events
+        swipeArea.addEventListener('touchstart', start, { passive: true });
+        swipeArea.addEventListener('touchmove', move, { passive: true });
+        swipeArea.addEventListener('touchend', end);
+        swipeArea.addEventListener('mousedown', start);
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', end);
+      }
+
+      // unlock action
+      function unlock() {
+        // show unlocked overlay
+        unlocked.classList.add('show');
+        unlocked.setAttribute('aria-hidden', 'false');
+
+        // play music (user interacted so allowed)
+        music.currentTime = 0;
+        music.play().catch(() => {/* ignore autoplay error */ });
+
+        // create floating hearts
+        for (let i = 0; i < 28; i++) {
+          const fh = document.createElement('div');
+          fh.className = 'float-heart';
+          fh.textContent = ['💖', '💗', '💕', '💞'][Math.floor(Math.random() * 4)];
+          // start near center of phone
+          const rect = phone.getBoundingClientRect();
+          const startX = rect.left + rect.width * (0.4 + Math.random() * 0.2) + (Math.random() - 0.5) * 40;
+          const startY = rect.top + rect.height * (0.6 + Math.random() * 0.12) + (Math.random() - 0.5) * 18;
+          fh.style.left = Math.max(8, Math.min(window.innerWidth - 40, startX)) + 'px';
+          fh.style.top = startY + 'px';
+          fh.style.fontSize = (16 + Math.random() * 16) + 'px';
+          fh.style.zIndex = 1200 + i;
+          document.body.appendChild(fh);
+          setTimeout(() => fh.remove(), 2400 + Math.random() * 1200);
+        }
+
+        // dim and freeze keypad area
+        screen.style.pointerEvents = 'none';
+      }
+
+      // replay/reset
+      closeBtn.addEventListener('click', () => {
+        // stop music
+        // music.pause();
+        // music.currentTime = 0;
+        unlocked.classList.remove('show');
+        unlocked.setAttribute('aria-hidden', 'true');
+
+        // restore UI
+        screen.style.pointerEvents = '';
+        pinWrap.style.display = 'flex';
+        keypad.style.display = 'grid';
+        hint.style.display = 'block';
+        input = "";
+        refreshDots();
+        // re-enable swipe area hidden
+        swipeWrap.style.display = 'none';
+      });
+
+      // keyboard support (optional)
+      window.addEventListener('keydown', (e) => {
+        if (e.key >= '0' && e.key <= '9' && input.length < 8) {
+          input += e.key; refreshDots();
+          if (input.length === 8) checkPin();
+        } else if (e.key === 'Backspace') {
+          input = input.slice(0, -1); refreshDots();
+        }
+      });
+
+      // accessibility: clicking outside keypad resets small hint
+      phone.addEventListener('click', (e) => { /* helps allow interactions for autoplay */ }, { passive: true });
+    })();
+  </script>
+</body>
+
+</html>
