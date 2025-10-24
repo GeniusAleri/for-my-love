@@ -229,8 +229,8 @@
     }
 
     .swipe-card {
-      width: 80%;
-      max-width: 320px;
+      width: 100%;
+      /* max-width: 320px; */
       border-radius: 18px;
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02));
       padding: 12px 14px;
@@ -386,7 +386,7 @@
         <div class="key fn" id="del">Del</div>
       </div>
 
-      <div class="hint" id="hint">PIN contoh: 17280325</div>
+      <div class="hint" id="hint"></div>
     </div>
 
     <!-- swipe area hidden until PIN correct -->
@@ -474,7 +474,7 @@
         void pinWrap.offsetWidth;
         pinWrap.classList.add('shake');
         hint.textContent = "PIN salah, coba lagi sayang 😘";
-        setTimeout(() => { hint.textContent = "PIN contoh: 17280325"; }, 1600);
+        // setTimeout(() => { hint.textContent = ""; }, 1600);
         input = "";
         refreshDots();
       }
