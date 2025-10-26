@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Kenangan 💌</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #a37bff, #e5b3fe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    /* Efek bokeh lembut */
+    .bokeh {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .bokeh span {
+      position: absolute;
+      display: block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      animation: float 10s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0.4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Frame chat */
+    .chat-box {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 400px;
+      height: 80%;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header kontak */
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 10px 15px;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      backdrop-filter: blur(6px);
+      position: relative;
+    }
+
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .chat-header .info {
+      display: flex;
+      flex-direction: column;
+      color: white;
+    }
+
+    .chat-header .info .name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .chat-header .info .status {
+      font-size: 13px;
+      color: white;
+    }
+
+    /* Area pesan */
+    .chat-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+
+    /* Bubble chat */
+    .bubble {
+      display: inline-block;
+      max-width: 80%;
+      padding: 10px 16px;
+      border-radius: 20px;
+      margin: 8px 0;
+      font-size: 15px;
+      line-height: 1.4em;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: appear 0.8s ease forwards;
+    }
+
+    .bubble.left {
+      background: rgba(255, 255, 255, 0.85);
+      color: #333;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+
+    .bubble.right {
+      background: #8f5fff;
+      color: white;
+      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    @keyframes appear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Footer teks */
+    .footer-text {
+      text-align: center;
+      color: white;
+      font-weight: 500;
+      margin-top: 15px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Efek bokeh -->
+  <div class="bokeh">
+    <span style="left:10%; animation-delay:0s; animation-duration:10s;"></span>
+    <span style="left:30%; animation-delay:2s; animation-duration:12s;"></span>
+    <span style="left:50%; animation-delay:4s; animation-duration:8s;"></span>
+    <span style="left:70%; animation-delay:6s; animation-duration:14s;"></span>
+    <span style="left:90%; animation-delay:1s; animation-duration:11s;"></span>
+  </div>
+
+  <!-- Frame Chat -->
+  <div class="chat-box">
+    <div class="chat-header">
+      <img src="icon.jpg" alt="Foto Profil">
+      <div class="info">
+        <div class="name">💜 My Purple 💜</div>
+        <div class="status">online ✨</div>
+      </div>
+    </div>
+    <div class="chat-content" id="chatBox"></div>
+  </div>
+
+  <!-- Musik -->
+  <audio id="bgMusic" src="Lady Gaga, Bruno Mars - Die With A Smile (Official Music Video) [kPa7bsKwL-c].mp3" autoplay
+    loop></audio>
+
+  <script>
+    const messages = [
+      { side: "left", text: "Morningg Bebeee💫" },
+      { side: "left", text: "Bebeee, belum bangun?🥹" },
+      { side: "left", text: "Bangun bebe, akuu kangennnn🥹" },
+      { side: "right", text: "Morningg jugaa sayanggkuu cintaakuuu 💜" },
+      { side: "right", text: "xixixi maaf yaa aku baru bangunn 💫" },
+      { side: "left", text: "ihh bebe, lama bangett bobo nyaa kek keboo 😌" },
+      { side: "right", text: "gapapaa keboo jugaa, tapii kamuu sayangg kaann wkw 💗" },
+      { side: "left", text: "iyaa hehe sayangg bangettt 💞" },
+      { side: "right", text: "sayangg, akuu tadii mimpiii, mau aku ceritain gaa??" },
+      { side: "left", text: "Mimpii apaa, mau dongg ceritain" },
+      { side: "right", text: "jadii giniii sayanggggg ........" },
+      { side: "right", text: "Sayanggg, sebenernyaa aku ga mimpii wkwk aku cuma mau bilangg, cieee kamu jadi perempuan pertama yang shopping sama mamaah wkwkw, akuu senengg bangett kemarin ngeliat kamu sama mamah kwwk, kek rasanyaa tuu duniaa lagii berpihak ke akuu wkwk, akuu senengg tapii akuu jugaa takutt, akuu takutt kalo suatu saat kamuu pergii dari kehidupan akuu, akuu gatauu harus gimana lagii, dan akuu jugaa gatauu apakah aku bisa sebahagiaa inii, kamuu doain akuu yaa semogaa aku bisa terus memperjuangakan kamu dan bisa menjadi satu satunyaa di hidup kamuu, dan semoga jugaa aku harap walaupun banyak laki laki yang jauhh lebih baik daripada akuu, aku bisa tetep jadi tempat kamu untuk pulangg yaa sayangg, maafin akuu kalo aku masih ada kurangnyaa, ada salahnyaa, tapii siapp berubah dan memperbaikinya kalo emang kamu ga sukaa dan itu buat kebaikan hubungan kitaaa, soo, i love u so much babyyy 💕🤗" },
+    ];
+
+    const chatBox = document.getElementById('chatBox');
+    let index = 0;
+
+    function showMessage() {
+      if (index >= messages.length) return;
+      const msg = messages[index];
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble', msg.side);
+      bubble.textContent = msg.text;
+      chatBox.appendChild(bubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      index++;
+      setTimeout(showMessage, 2500);
+    }
+
+    setTimeout(showMessage, 1000);
+
+    // Autoplay musik di HP (gesture)
+    document.body.addEventListener('click', () => {
+      const audio = document.getElementById('bgMusic');
+      audio.play();
+    });
+  </script>
+</body>
+
+</html>

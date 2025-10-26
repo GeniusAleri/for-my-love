@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Album Hari yang Berkesan 💜</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #a37bff, #e5b3fe);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+  }
+
+  /* Efek bokeh background */
+  .bokeh {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .bokeh span {
+    position: absolute;
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    animation: float 10s infinite ease-in-out;
+  }
+  @keyframes float {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* Frame foto */
+  .album {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    z-index: 2;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .album img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    border-radius: 20px;
+    transition: all 1s ease;
+  }
+
+  /* Animasi variasi */
+  .show {
+    opacity: 1;
+    animation: animasiFoto 4s ease forwards;
+  }
+
+  @keyframes animasiFoto {
+    0% { transform: scale(1.2) rotate(5deg); opacity: 0; }
+    25% { transform: scale(1) rotate(0); opacity: 1; }
+    75% { transform: scale(1.05) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  /* Judul di bawah */
+  h2 {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.3em;
+    text-shadow: 0 0 10px rgba(255,255,255,0.6);
+  }
+</style>
+</head>
+<body>
+  <!-- Efek bokeh -->
+  <div class="bokeh">
+    <span style="left:10%; animation-delay:0s; animation-duration:10s;"></span>
+    <span style="left:30%; animation-delay:2s; animation-duration:12s;"></span>
+    <span style="left:50%; animation-delay:4s; animation-duration:8s;"></span>
+    <span style="left:70%; animation-delay:6s; animation-duration:14s;"></span>
+    <span style="left:90%; animation-delay:1s; animation-duration:11s;"></span>
+  </div>
+
+  <!-- Frame album -->
+  <div class="album">
+    <img src="1.jpg" class="show">
+    <img src="2.jpg">
+    <img src="3.jpg">
+    <img src="4.jpg">
+    <img src="5.jpg">
+    <img src="6.jpg">
+    <img src="7.jpg">
+    <img src="8.jpg">
+    <img src="9.jpg">
+    <img src="10.jpg">
+    <img src="11.jpg">
+    <img src="12.jpg">
+    <img src="13.jpg">
+    <h2>Hari yang Tak Akan Terlupakan 💜</h2>
+  </div>
+
+  <!-- Lagu -->
+  <audio id="bgMusic" src="TULUS - Monokrom (Official Music Video).mp3" autoplay loop></audio>
+
+  <script>
+    const photos = document.querySelectorAll('.album img');
+    let index = 0;
+
+    function nextPhoto() {
+      photos[index].classList.remove('show');
+      index = (index + 1) % photos.length;
+      photos[index].classList.add('show');
+    }
+
+    setInterval(nextPhoto, 5000); // ganti foto tiap 5 detik
+
+    // Autoplay musik di HP (butuh gesture pertama)
+    document.body.addEventListener('click', () => {
+      const audio = document.getElementById('bgMusic');
+      audio.play();
+    });
+  </script>
+</body>
+</html>
