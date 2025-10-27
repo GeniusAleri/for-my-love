@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Monthversary 💜</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #c6a4f0, #e4c9ff);
+            color: #4a2a7a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #6b3fa0;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(120, 50, 160, 0.3);
+            margin-bottom: 25px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message {
+            max-width: 700px;
+            text-align: center;
+            line-height: 1.8;
+            font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(100, 0, 150, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .music-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            background-color: #b58df5;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(100, 0, 150, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #a479e9;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #6b3fa0;
+            opacity: 0.8;
+        }
+
+        /* Animasi halus muncul */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1,
+        .message,
+        .music-controls,
+        footer {
+            animation: fadeIn 1.5s ease forwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>💜 Happy Monthversary, My Love 💜</h1>
+
+    <div class="slideshow-container">
+        <div class="slide active"><img src="1.jpg" alt="foto1"></div>
+        <div class="slide"><img src="2.jpg" alt="foto2"></div>
+        <div class="slide"><img src="3.jpg" alt="foto3"></div>
+        <div class="slide"><img src="4.jpg" alt="foto4"></div>
+        <div class="slide"><img src="5.jpg" alt="foto5"></div>
+        <div class="slide"><img src="6.jpg" alt="foto6"></div>
+        <div class="slide"><img src="7.jpg" alt="foto7"></div>
+        <div class="slide"><img src="8.jpg" alt="foto8"></div>
+        <div class="slide"><img src="9.jpg" alt="foto9"></div>
+        <div class="slide"><img src="10.jpg" alt="foto10"></div>
+        <div class="slide"><img src="11.jpg" alt="foto11"></div>
+        <div class="slide"><img src="12.jpg" alt="foto12"></div>
+        <div class="slide"><img src="13.jpg" alt="foto13"></div>
+        <div class="slide"><img src="14.jpg" alt="foto14"></div>
+        <div class="slide"><img src="15.jpg" alt="foto15"></div>
+        <div class="slide"><img src="16.png" alt="foto16"></div>
+        <div class="slide"><img src="17.png" alt="foto17"></div>
+        <div class="slide"><img src="18.png" alt="foto18"></div>
+        <div class="slide"><img src="19.png" alt="foto19"></div>
+        <div class="slide"><img src="20.png" alt="foto20"></div>
+        <div class="slide"><img src="21.png" alt="foto21"></div>
+        <div class="slide"><img src="22.jpg" alt="foto22"></div>
+        <div class="slide"><img src="23.jpg" alt="foto23"></div>
+        <div class="slide"><img src="24.jpg" alt="foto24"></div>
+        <div class="slide"><img src="25.jpg" alt="foto25"></div>
+        <div class="slide"><img src="26.jpg" alt="foto26"></div>
+        <div class="slide"><img src="27.jpg" alt="foto27"></div>
+        <div class="slide"><img src="28.jpg" alt="foto28"></div>
+        <div class="slide"><img src="29.jpg" alt="foto29"></div>
+        <div class="slide"><img src="30.jpg" alt="foto30"></div>
+        <div class="slide"><img src="31.jpg" alt="foto31"></div>
+        <div class="slide"><img src="32.jpg" alt="foto32"></div>
+        <div class="slide"><img src="33.jpg" alt="foto33"></div>
+        <div class="slide"><img src="34.jpg" alt="foto34"></div>
+        <div class="slide"><img src="35.jpg" alt="foto35"></div>
+        <div class="slide"><img src="36.jpg" alt="foto36"></div>
+        <div class="slide"><img src="37.jpg" alt="foto37"></div>
+        <div class="slide"><img src="38.jpg" alt="foto38"></div>
+        <div class="slide"><img src="39.jpg" alt="foto39"></div>
+        <div class="slide"><img src="40.jpg" alt="foto40"></div>
+        <div class="slide"><img src="41.jpg" alt="foto41"></div>
+        <div class="slide"><img src="42.jpg" alt="foto42"></div>
+        <div class="slide"><img src="43.jpg" alt="foto43"></div>
+        <div class="slide"><img src="44.jpg" alt="foto44"></div>
+        <div class="slide"><img src="45.jpg" alt="foto45"></div>
+        <div class="slide"><img src="46.jpg" alt="foto46"></div>
+        <div class="slide"><img src="47.jpg" alt="foto47"></div>
+        <div class="slide"><img src="48.jpg" alt="foto48"></div>
+        <div class="slide"><img src="49.jpg" alt="foto49"></div>
+        <div class="slide"><img src="50.jpg" alt="foto50"></div>
+        <div class="slide"><img src="51.jpg" alt="foto51"></div>
+    </div>
+
+    <div class="message">
+        <p>
+            Haiii cantikk, Happy Monthversary sayanggkuu, ga kerasaa yaa udah 1 bulan kitaa berjalan, Hari demi hari
+            yang kita lewati selama satu bulan ini terasa begitu indah 💜 <br>
+            Terima kasih babyyy kamuu sudah menjadi bagian dari ceritaku, ceritaa yangg indah dalam hidupkuu, yang
+            menemani
+            setiap tawa dan sabarku di setiap waktu.
+            akuu bahagiaa bisa menjalani hari demi hari bersamamuu, aku benar benar merasa beruntung bisa merasakan
+            cintaa yang luar biasaa dari kamuu. <br>
+            Mungkin dalam waktu 1 bulan ini, masih banyak hal hal yang belum sesuai dengan apa yang kamu inginkan dari
+            akuu. <br>
+            Harapan akuu, semoga bulan-bulan berikutnya makin banyak cerita bahagia yang kita tulis bareng, ya.
+            Apapun yang terjadi dalam hubungan kita kedepannya, semogaa kita bisa lewati itu bersama sama yaa sayanggg.
+            Aku bersyukur punya kamu, dan aku harap hubungan ini terus tumbuh penuh cinta. <br> I love U Uswaa kuu sayanggg💫
+        </p>
+    </div>
+
+    <div class="music-controls">
+        <button id="musicBtn">🎵 Play Music</button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="One Direction - You & I.mp3" type="audio/mpeg">
+    </audio>
+
+    <footer>❤️ 1 Bulan Bersamamu ❤️</footer>
+
+    <script>
+        // --- SLIDESHOW OTOMATIS ---
+        const slides = document.querySelectorAll(".slide");
+        let index = 0;
+        const music = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
+
+        function showNextSlide() {
+            slides[index].classList.remove("active");
+            index = (index + 1) % slides.length;
+            slides[index].classList.add("active");
+        }
+        setInterval(showNextSlide, 4000);
+
+        // --- MUSIK PLAY/PAUSE ---
+        // pastikan musik bisa dimulai setelah interaksi pertama (syarat browser)
+        document.body.addEventListener("click", () => {
+            if (music.paused && !musicBtn.classList.contains("started")) {
+                music.play();
+                musicBtn.textContent = "⏸️ Pause Music";
+                musicBtn.classList.add("started");
+            }
+        }, { once: true });
+
+        // tombol play/pause manual
+        musicBtn.addEventListener("click", () => {
+            if (music.paused) {
+                music.play();
+                musicBtn.textContent = "⏸️ Pause Music";
+            } else {
+                music.pause();
+                musicBtn.textContent = "🎵 Play Music";
+            }
+        });
+    </script>
+</body>
+
+</html>
