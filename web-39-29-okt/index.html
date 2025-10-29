@@ -175,14 +175,20 @@
             pesan akuu kamuu jangan lagii lagii telat makan yaa sayanggkuu
             I love you, today and always babyyy 💫
         </p>
+        <div class="music-controls">
+            <button id="musicBtn">🎵 Play Music</button>
+        </div>
     </div>
 
+    <audio id="bgMusic" loop>
+        <source src="blue.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         const giftBox = document.getElementById("giftBox");
         const letter = document.getElementById("letter");
-        // const music = document.getElementById("bgMusic");
-        // const musicBtn = document.getElementById("musicBtn");
+        const music = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicBtn");
 
         giftBox.addEventListener("click", () => {
             giftBox.classList.add("open");
@@ -206,7 +212,15 @@
         });
 
         // kontrol musik
-
+        musicBtn.addEventListener("click", () => {
+            if (music.paused) {
+                music.play();
+                musicBtn.textContent = "⏸️ Pause Music";
+            } else {
+                music.pause();
+                musicBtn.textContent = "🎵 Play Music";
+            }
+        });
     </script>
 
 </body>
