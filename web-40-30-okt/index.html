@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Flower Bloom — Untukmu 💜</title>
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+  :root{
+    --bg1: #f3e9ff;
+    --bg2: #e5ccff;
+    --accent: #7b4ed8;
+    --soft: #cdb6f8;
+    --text: #4a2a7a;
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background: linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  .wrap{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    gap:28px;
+    flex-direction:column;
+  }
+
+  .card{
+    width:100%;
+    max-width:920px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35));
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(120,60,160,0.12);
+    display:flex;
+    gap:28px;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* Left: Flower area */
+  .flower-area{
+    width:360px;
+    min-width:260px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  /* Flower SVG container */
+  .flower-wrap{
+    width:300px;
+    height:300px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    cursor:pointer;
+    user-select:none;
+  }
+
+  /* Petal / bloom animation handled via CSS classes toggled by JS */
+  svg.flower{
+    width:100%;
+    height:100%;
+    overflow:visible;
+  }
+
+  /* small hint text */
+  .hint{
+    font-size:0.9rem;
+    color:rgba(74,42,122,0.85);
+    opacity:0.95;
+    text-align:center;
+  }
+
+  /* Right: message area */
+  .message-area{
+    flex:1;
+    min-width:280px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+  }
+
+  .title{
+    font-size:1.25rem;
+    font-weight:700;
+    color:var(--accent);
+  }
+
+  .subtitle{
+    font-size:0.95rem;
+    color:rgba(74,42,122,0.9);
+  }
+
+  .letter{
+    width:100%;
+    background:rgba(255,255,255,0.85);
+    border-radius:12px;
+    padding:18px;
+    min-height:170px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-start;
+    box-shadow:0 6px 18px rgba(120,60,160,0.06);
+    position:relative;
+    overflow:hidden;
+  }
+
+  .letter p{
+    margin:0;
+    line-height:1.8;
+    font-size:1rem;
+    color:var(--text);
+    white-space:pre-wrap;
+  }
+
+  .controls{
+    display:flex;
+    gap:10px;
+    margin-top:8px;
+    align-items:center;
+  }
+
+  .btn{
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:10px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 8px 18px rgba(123,78,216,0.12);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:active{ transform:translateY(1px) }
+  .btn.secondary{
+    background:transparent;
+    color:var(--accent);
+    border:1px solid rgba(123,78,216,0.12);
+    box-shadow:none;
+    font-weight:500;
+  }
+
+  /* tiny visual flourish under letter */
+  .stamp{
+    position:absolute;
+    right:12px;
+    bottom:12px;
+    font-size:0.8rem;
+    color:rgba(74,42,122,0.6);
+  }
+
+  /* Bloom animation helpers */
+  .petal{
+    transform-origin:50% 80%;
+    transition: transform 900ms cubic-bezier(.2,.9,.3,1);
+  }
+
+  /* initial folded state (closed bud) */
+  .closed .petal.left-1 { transform: rotate(-30deg) translateY(40px) scale(.6); opacity:0.0; }
+  .closed .petal.left-2 { transform: rotate(-10deg) translateY(30px) scale(.65); opacity:0.0; }
+  .closed .petal.center { transform: scale(.5); opacity:0.0; }
+  .closed .petal.right-1 { transform: rotate(30deg) translateY(40px) scale(.6); opacity:0.0; }
+  .closed .petal.right-2 { transform: rotate(10deg) translateY(30px) scale(.65); opacity:0.0; }
+  .closed .leaf { transform: translateY(20px) scale(.9); opacity:0.0; }
+
+  /* open state */
+  .open .petal.left-1 { transform: rotate(-8deg) translateY(0) scale(1); opacity:1; }
+  .open .petal.left-2 { transform: rotate(-4deg) translateY(0) scale(1); opacity:1; transition-delay:.08s; }
+  .open .petal.center { transform: scale(1); opacity:1; transition-delay:.12s; }
+  .open .petal.right-1 { transform: rotate(8deg) translateY(0) scale(1); opacity:1; transition-delay:.06s; }
+  .open .petal.right-2 { transform: rotate(4deg) translateY(0) scale(1); opacity:1; transition-delay:.1s; }
+  .open .leaf { transform: translateY(0) scale(1); opacity:1; transition-delay:.18s; }
+
+  /* sparkle petals floating */
+  .sparkle{
+    position:absolute;
+    pointer-events:none;
+    font-size:16px;
+    opacity:0;
+    transform:translateY(0) scale(.8);
+    animation: floatAway 2200ms linear forwards;
+  }
+  @keyframes floatAway{
+    0% { opacity:1; transform:translateY(0) scale(1); }
+    100% { opacity:0; transform:translateY(-140px) scale(1.4); }
+  }
+
+  /* small responsive tweaks */
+  @media (max-width:880px){
+    .card{ padding:18px; flex-direction:column; gap:20px; }
+    .flower-area{ order:1 }
+    .message-area{ order:2; width:100% }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" aria-live="polite">
+      <div class="flower-area">
+        <div class="flower-wrap closed" id="flowerWrap" title="Klik kotak bunga untuk mekarkan">
+          <!-- SVG simple stylized flower -->
+          <svg class="flower" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bunga">
+            <!-- leaves -->
+            <g class="leaf" fill="#b8d8c8" transform="translate(110,170)">
+              <path d="M-40,0 C-60,-30 -20,-70 10,-68 C30,-67 50,-40 40,-15 C28,15 -5,28 -40,0" transform="rotate(-15)"></path>
+            </g>
+            <g class="leaf" class="leaf2" fill="#b8d8c8" transform="translate(110,170)">
+              <path d="M40,0 C60,-30 20,-70 -10,-68 C-30,-67 -50,-40 -40,-15 C-28,15 5,28 40,0" transform="rotate(15)"></path>
+            </g>
+
+            <!-- petals left -->
+            <g class="petal left-2" fill="#dcb3ff" transform="translate(70,95)">
+              <ellipse cx="0" cy="0" rx="26" ry="48" />
+            </g>
+            <g class="petal left-1" fill="#e8d5ff" transform="translate(85,65)">
+              <ellipse cx="0" cy="0" rx="32" ry="54" />
+            </g>
+
+            <!-- center -->
+            <g class="petal center" transform="translate(110,90)">
+              <circle cx="0" cy="0" r="28" fill="#ffefef" />
+              <circle cx="0" cy="0" r="18" fill="#ffd6f0" />
+            </g>
+
+            <!-- petals right -->
+            <g class="petal right-1" fill="#e8d5ff" transform="translate(135,65)">
+              <ellipse cx="0" cy="0" rx="32" ry="54" />
+            </g>
+            <g class="petal right-2" fill="#dcb3ff" transform="translate(150,95)">
+              <ellipse cx="0" cy="0" rx="26" ry="48" />
+            </g>
+
+            <!-- stem -->
+            <rect x="106" y="118" width="8" height="80" rx="4" ry="4" fill="#7fbf8e"></rect>
+          </svg>
+        </div>
+
+        <div class="hint">Klik bunga untuk membuatnya mekar ✨</div>
+      </div>
+
+      <div class="message-area">
+        <div class="title">Flower Bloom — Untukmu</div>
+        <div class="subtitle">Klik untuk melihat pesannya.</div>
+
+        <div class="letter" id="letter">
+          <p id="letterText"></p>
+        </div>
+
+        <div class="controls" aria-hidden="false">
+          <button class="btn" id="playBtn">▶️ Putar Musik</button>
+          <button class="btn secondary" id="resetBtn">🌱 Kembali (Reset)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- audio (taruh file mp3 di folder yang sama dan beri nama lagu.mp3) -->
+  <audio id="bgMusic" loop preload="none">
+    <source src="blue.mp3" type="audio/mpeg">
+    Browser Anda tidak mendukung audio.
+  </audio>
+
+<script>
+  // Pesan cinta yang kubuat sendiri (bisa dikustom nanti)
+  const message = `Sayangku,\n\n Bulan Oktober sudah di penghujung harii, tapii percayalah cintaku padamuu tidak akan pernah ada ujungnyaa xiixix. \n\n semangatt teruss yaa sayangg, bahagia teruss yaa babyy, dan teruss bersamakuu yaa cintaaakuu \n\nTerima kasih sudah jadi alasanku tersenyum. Aku sayang kamu, sekarang dan selalu. 💜`;
+
+  const flowerWrap = document.getElementById('flowerWrap');
+  const letterText = document.getElementById('letterText');
+  const bgMusic = document.getElementById('bgMusic');
+  const playBtn = document.getElementById('playBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const letter = document.getElementById('letter');
+
+  let opened = false;
+  let typingTimer = null;
+
+  // Helper: typewriter effect
+  function typeText(targetEl, text, speed = 24){
+    targetEl.textContent = '';
+    let i = 0;
+    clearInterval(typingTimer);
+    typingTimer = setInterval(() => {
+      targetEl.textContent += text.charAt(i);
+      i++;
+      // auto-scroll not needed but keep caret behaviour
+      if(i >= text.length) clearInterval(typingTimer);
+    }, speed);
+  }
+
+  // create tiny floating sparkles/petals when bloom
+  function spawnSparkles(count = 12){
+    for(let i=0;i<count;i++){
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.textContent = ['✨','💜','•','✿'][Math.floor(Math.random()*4)];
+      // position near flower center
+      const rect = flowerWrap.getBoundingClientRect();
+      const x = rect.left + rect.width/2 + (Math.random()*120 - 60);
+      const y = rect.top + rect.height/2 + (Math.random()*40 - 20);
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      s.style.fontSize = (10 + Math.random()*16) + 'px';
+      s.style.animationDuration = (1400 + Math.random()*1000) + 'ms';
+      document.body.appendChild(s);
+      setTimeout(()=> s.remove(), 2600);
+    }
+  }
+
+  // ensure user interaction before playing audio (browser policy)
+  function safePlayAudio(){
+    if(bgMusic.paused){
+      bgMusic.play().catch(()=> {
+        // play blocked — update button text to instruct user
+        playBtn.textContent = '▶️ Klik untuk putar musik';
+      });
+    }
+  }
+
+  // bloom handler
+  flowerWrap.addEventListener('click', () => {
+    if(opened) return; // prevent repeat
+    opened = true;
+
+    // set open class on container to animate petals
+    flowerWrap.classList.remove('closed');
+    flowerWrap.classList.add('open');
+
+    // spawn sparkles a few times for richness
+    spawnSparkles(14);
+    setTimeout(()=> spawnSparkles(10), 250);
+    setTimeout(()=> spawnSparkles(8), 520);
+
+    // start typing message after a short delay (while bloom animates)
+    setTimeout(()=> {
+      typeText(letterText, message, 18);
+    }, 520);
+
+    // attempt to play audio once user clicked (most browsers allow)
+    safePlayAudio();
+    playBtn.textContent = '⏸️ Musik (klik untuk pause)';
+  });
+
+  // music toggle button
+  playBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // prevent triggering other clicks
+    if(bgMusic.paused){
+      bgMusic.play().catch(()=> {
+        // if play rejected, show instruction
+        playBtn.textContent = '▶️ Klik lagi untuk izinkan audio';
+      });
+      playBtn.textContent = '⏸️ Musik (klik untuk pause)';
+    } else {
+      bgMusic.pause();
+      playBtn.textContent = '▶️ Putar Musik';
+    }
+  });
+
+  // reset button - bring back closed bud and clear text + stop music
+  resetBtn.addEventListener('click', () => {
+    // clear typing
+    clearInterval(typingTimer);
+    letterText.textContent = '';
+    // reset classes
+    flowerWrap.classList.remove('open');
+    flowerWrap.classList.add('closed');
+    opened = false;
+    // pause music and reset
+    if(!bgMusic.paused){
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }
+    playBtn.textContent = '▶️ Putar Musik';
+  });
+
+  // small accessibility: press space or enter while focusing flower to open
+  flowerWrap.tabIndex = 0;
+  flowerWrap.addEventListener('keydown', (ev) => {
+    if(ev.key === 'Enter' || ev.key === ' '){
+      ev.preventDefault();
+      flowerWrap.click();
+    }
+  });
+
+  // initial state: closed
+  (function init(){
+    flowerWrap.classList.add('closed');
+    letterText.textContent = '';
+  })();
+</script>
+</body>
+</html>
