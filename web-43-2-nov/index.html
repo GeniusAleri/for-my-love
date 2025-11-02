@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock of Love</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #c489f1, #d680f7, #ffd1ff);
+            font-family: 'Dancing Script', cursive;
+            overflow: hidden;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+        .clock {
+            width: 250px;
+            height: 250px;
+            border: 8px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            position: relative;
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 30px rgba(255, 182, 193, 0.5);
+        }
+
+        .hand {
+            width: 4px;
+            height: 100px;
+            background: #ff4d6d;
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: rotate(0deg);
+            border-radius: 2px;
+            transition: transform 2s ease-in-out;
+        }
+
+        .center {
+            width: 20px;
+            height: 20px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .message {
+            margin-top: 40px;
+            font-size: 1.6em;
+            color: #fff;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 100, 150, 0.6);
+            transition: opacity 1s ease;
+        }
+
+        /* Efek hati beterbangan */
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 20px;
+            animation: floatUp 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Musik romantis -->
+    <audio id="bgMusic"
+        src="randy-pangalila-feat-mikha-tambayong-i-need-you-official-music-video-ost-nada-ci_RwabCumw.mp3"
+        autoplay loop></audio>
+
+    <div class="clock">
+        <div class="hand" id="hand"></div>
+        <div class="center"></div>
+    </div>
+
+    <div class="message" id="message">💖 Jam Cinta Dimulai 💖</div>
+
+    <script>
+        const messages = {
+            1: "Jam 1 — Saat pertama kali aku mengenalmu 💕",
+            2: "Jam 2 — Aku mulai merindukanmu tanpa alasan 🥰",
+            3: "Jam 3 — Dunia terasa lebih indah bersamamu 💞",
+            4: "Jam 4 — Senyummu jadi alasanku bertahan 🌸",
+            5: "Jam 5 — Waktuku selalu ingin bersamamu ⏳",
+            6: "Jam 6 — Kamu cahaya di setiap hariku 🌅",
+            7: "Jam 7 — Setiap detikku milikmu 💫",
+            8: "Jam 8 — Aku ingin berhenti di pelukanmu 🫶",
+            9: "Jam 9 — Hatiku berputar seirama jarum jam ini ❤️",
+            10: "Jam 10 — Wajahmu selalu mengingatkanku dengan keindahan ☀️",
+            11: "Jam 11 — Satu jam lagi menuju selamanya 💍",
+            12: "Jam 12 — 12 jam berlalu, cintaku tetap sama 💖"
+        };
+
+        const hand = document.getElementById("hand");
+        const message = document.getElementById("message");
+        let currentHour = 1;
+
+        function rotateHand(hour) {
+            const degree = (hour % 12) * 30; // 360/12 = 30 derajat per jam
+            hand.style.transform = `rotate(${degree}deg)`;
+            message.style.opacity = 0;
+
+            setTimeout(() => {
+                message.textContent = messages[hour];
+                message.style.opacity = 1;
+            }, 1000);
+        }
+
+        function animateClock() {
+            const interval = setInterval(() => {
+                rotateHand(currentHour);
+                document.getElementById("bgMusic").play();
+                currentHour++;
+                if (currentHour > 12) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        message.textContent = "💞 Jam 12 — 12 jam berlalu, cintaku tetap sama 💖 💞";
+                    }, 2500);
+                }
+            }, 8500);
+        }
+
+        animateClock();
+
+        // Efek hati beterbangan
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.fontSize = 12 + Math.random() * 24 + "px";
+            heart.style.animationDuration = 4 + Math.random() * 3 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 7000);
+        }
+        setInterval(createHeart, 400);
+
+        // Autoplay musik (kadang perlu klik dulu di browser)
+        document.addEventListener("click", () => {
+            document.getElementById("bgMusic").play();
+        });
+    </script>
+</body>
+
+</html>
