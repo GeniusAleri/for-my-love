@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Kamu 💖</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(120deg, #e663df, #f187e9, #ffd6e0);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container {
+    text-align: center;
+    color: #fff;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(255, 105, 180, 0.4);
+    backdrop-filter: blur(10px);
+  }
+
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+  }
+
+  p {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+
+  #message {
+    font-size: 1.3em;
+    font-weight: 500;
+    min-height: 60px;
+  }
+
+  button {
+    background: #ff69b4;
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 1em;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background: #ff85c1;
+    transform: scale(1.05);
+  }
+
+  .heart {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: pink;
+    transform: rotate(45deg);
+    animation: floatUp 4s linear infinite;
+  }
+
+  .heart::before, .heart::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: pink;
+    border-radius: 50%;
+  }
+
+  .heart::before { top: -10px; left: 0; }
+  .heart::after { left: -10px; top: 0; }
+
+  @keyframes floatUp {
+    0% { opacity: 1; transform: translateY(0) rotate(45deg); }
+    100% { opacity: 0; transform: translateY(-800px) rotate(45deg); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .music {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hai, Cintaku 💕</h1>
+    <div id="message"></div>
+    <button id="nextBtn">Lanjut ❤️</button>
+    <div class="music">
+      <audio id="bgMusic" loop>
+        <source src="Hivi! - Mata Ke Hati (Lirik Lagu).mp3" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+
+<script>
+  const messages = [
+    "Dunia terasa lebih indah sejak aku mengenal kamu 💫",
+    "Kamu bukan cuma istimewa, tapi satu-satunya buat aku ❤️",
+    "Kalau ada satu hal yang aku syukuri setiap hari...",
+    "Itu adalah kesempatan untuk mencintaimu lebih lagi 💋",
+    "Kamu, alasan senyumku setiap hari 💖",
+    "I love you, selalu dan selamanya 💞"
+  ];
+
+  let i = 0;
+  const msgEl = document.getElementById('message');
+  const btn = document.getElementById('nextBtn');
+  const music = document.getElementById('bgMusic');
+
+  function typeText(text, callback) {
+    msgEl.innerHTML = "";
+    let j = 0;
+    const interval = setInterval(() => {
+      msgEl.innerHTML += text.charAt(j);
+      j++;
+      if (j === text.length) {
+        clearInterval(interval);
+        if (callback) callback();
+      }
+    }, 60);
+  }
+
+  btn.addEventListener('click', () => {
+    if (i === 0) {
+      music.play();
+    }
+    if (i < messages.length) {
+      typeText(messages[i]);
+      i++;
+    } else {
+      msgEl.innerHTML = "💘 Aku sayang kamu lebih dari kata-kata 💘";
+      btn.style.display = 'none';
+    }
+  });
+
+  // animasi hati terbang
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.background = `hsl(${Math.random()*360}, 70%, 80%)`;
+    document.body.appendChild(heart);
+    setTimeout(() => { heart.remove(); }, 4000);
+  }
+  setInterval(createHeart, 300);
+</script>
+</body>
+</html>
